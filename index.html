@@ -3,10 +3,21 @@
 <head>
   <meta charset="utf-8">
   <title>My Amazing Viz</title>
+
+  <!-- Library Imports -->
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+
+  <!-- Figure Imports -->
+  <script src="fig1.js"></script>
+
 </head>
-<body>
-  <h1>My Amazing Header</h1>
-  <text>Some text.</text>
+<body onload="bodyLoad()">
+  <h1>My Amazing Site</h1>
+  <p>Some text.</p>
+  <p><em>More text.</em></p>
+
+  <svg id="fig1" width="600" height="600" style="background: lightgrey"></svg>
+
 
 </body>
 </html>

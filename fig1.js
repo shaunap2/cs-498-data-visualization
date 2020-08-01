@@ -55,13 +55,6 @@ function generateFigure(data) {
   dots.enter()
     .append("circle")
     .merge(dots)
-    .transition()
-    .duration(2000)
-    .attr("r", function(d) { return aScale(d); })
-    .attr("cx", function(d, i) { return xScale(d); })
-    .attr("cy", function(d, i) { return yScale(d); })
-    .attr("fill", "purple")
-    .selection()
     .append("title")
     .text(function(d) {
       return "The current value is " + d;
@@ -70,9 +63,18 @@ function generateFigure(data) {
 
   dots.exit().remove();
 
-  // Add mouseover events.
+  // Apply transition on figure load.
   dots = fig1.selectAll("circle");
 
+  dots.transition()
+    .duration(2000)
+    .attr("r", function(d) { return aScale(d); })
+    .attr("cx", function(d, i) { return xScale(d); })
+    .attr("cy", function(d, i) { return yScale(d); })
+    .attr("fill", "purple")
+    ;
+
+  // Add mouseover events.
   dots
     .on("mouseover", function(d) {
       d3.select(this).attr("fill", bb ? "orange" : "red");
@@ -82,7 +84,7 @@ function generateFigure(data) {
     })
     ;
 
-  // Add pop up text.
+  // Update pop up text.
   dots
     .select("title")
     .text(function(d) {

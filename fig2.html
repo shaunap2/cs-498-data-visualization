@@ -14,12 +14,12 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 
   <!-- Figure Imports -->
-  <script src="fig2.js"></script>
+  <script src="fig1.js"></script>
 
 </head>
-<body onload="bodyLoad()">
+<body onload="bodyLoadScatterPlot()">
   <h3>Global Significant Earthquakes Since 2150 BCE</h3>
-  <p>Now we are here!</p>
+  <p>Scatter Chart</p>
 
   <ul class="nav nav-pills">
     <li class="nav-item">
@@ -35,6 +35,16 @@
 
   <p></p>
 
-  <svg id="fig2" width="600" height="600" style="background: lightblue"></svg>
+  <form>
+    <div class="form-group">
+      <label for="myselect">Select a Country</label>
+      <select class="form-control" id="myselect" onchange="onSelectChangeScatterPlot();" style="max-width: 300px;">
+      </select>
+    </div>
+  </form>
+
+  <p></p>
+
+  <svg id="myfigure" style="background: cornsilk"></svg>
 </body>
 </html>

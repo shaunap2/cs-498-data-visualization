@@ -212,9 +212,10 @@ function initializeBarChart(data) {
     ;
 
   // Define scales.
-  var xScale = d3.scaleLinear()
-    .domain([0, d3.max(data, function(d) { return d; })])
-    .range([padding, w - padding * 2])
+  var xScale = d3.scaleBand()
+    .domain(d3.range(data.length))
+    .rangeRound([padding, w - padding * 2])
+    .paddingInner(0.05)
     ;
 
   var yScale = d3.scaleLinear()
@@ -253,9 +254,10 @@ function updateBarChart(data) {
   var myfigure = d3.select("#myfigure");
 
   // Update scales.
-  var xScale = d3.scaleLinear()
-    .domain([0, d3.max(data, function(d) { return d; })])
-    .range([padding, w - padding * 2])
+  var xScale = d3.scaleBand()
+    .domain(d3.range(data.length))
+    .rangeRound([padding, w - padding * 2])
+    .paddingInner(0.05)
     ;
 
   var yScale = d3.scaleLinear()
@@ -263,33 +265,30 @@ function updateBarChart(data) {
     .range([h - padding, padding])
     ;
 
-  var aScale = d3.scaleSqrt()
-    .domain([0, d3.max(data, function(d) { return d; })])
-    .range([0, 10]);
-
   // General Update Pattern
-  var dots = myfigure.selectAll("circle").data(data);
+  var rects = myfigure.selectAll("rect").data(data);
 
-  dots.enter()
-    .append("circle")
-    .merge(dots)
+  rects.enter()
+    .append("rect")
+    .merge(rects)
     .append("title")
     .text(function(d) {
       return "The current value is " + d;
     })
     ;
 
-  dots.exit().remove();
+  rects.exit().remove();
 
   // Apply transition on figure load. Done here to avoid delays in tool tip pop ups.
-  dots = myfigure.selectAll("circle");
+  rects = myfigure.selectAll("rect");
 
-  dots.transition()
+  rects.transition()
     .duration(2000)
-    .attr("r", function(d) { return aScale(d); })
-    .attr("cx", function(d, i) { return xScale(d); })
-    .attr("cy", function(d, i) { return yScale(d); })
-    .attr("fill", "purple")
+    .attr("x", function(d, i) { return xScale(i); })
+    .attr("y", function(d) { return yScale(d); })
+    .attr("width", xScale.bandwidth())
+    .attr("height", function(d, i) { return h - padding - yScale(d); })
+    .attr("fill", "yellow")
     ;
 
   // Update axes.
@@ -312,7 +311,7 @@ function updateBarChart(data) {
     ;
 
   // Add mouseover events.
-  dots
+  rects
     .on("mouseover", function(d) {
       d3.select(this).attr("fill", bb ? "orange" : "red");
     })
@@ -322,7 +321,7 @@ function updateBarChart(data) {
     ;
 
   // Update pop up text. This works because 'title' elements were created in the GUP above for each circle.
-  dots
+  rects
     .select("title")
     .text(function(d) {
       return "The current value is " + d;

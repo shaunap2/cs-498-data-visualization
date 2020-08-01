@@ -43,13 +43,13 @@ function generateFigure(data) {
     //.ticks(5)
     ;
 
-  // Define the SVG size.
-  var fig1 = d3.select("#fig1")
+  // Define the SVG canvas size.
+  var myfigure = d3.select("#myfigure")
     .attr("width", w)
     .attr("height", h)
     ;
 
-  var dots = fig1.selectAll("circle").data(data);
+  var dots = myfigure.selectAll("circle").data(data);
 
   // General Update Pattern
   dots.enter()
@@ -63,8 +63,8 @@ function generateFigure(data) {
 
   dots.exit().remove();
 
-  // Apply transition on figure load.
-  dots = fig1.selectAll("circle");
+  // Apply transition on figure load. Done here to avoid delays in tool tip pop ups.
+  dots = myfigure.selectAll("circle");
 
   dots.transition()
     .duration(2000)
@@ -72,6 +72,21 @@ function generateFigure(data) {
     .attr("cx", function(d, i) { return xScale(d); })
     .attr("cy", function(d, i) { return yScale(d); })
     .attr("fill", "purple")
+    ;
+
+  // Generate axes.
+  myfigure
+    .append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + (h - padding) + ")")
+    .call(xAxis)
+    ;
+
+  myfigure
+    .append("g")
+    .attr("class", "y axis")
+    .attr("transform", "translate(" + padding + ",0)")
+    .call(yAxis)
     ;
 
   // Add mouseover events.
@@ -84,7 +99,7 @@ function generateFigure(data) {
     })
     ;
 
-  // Update pop up text.
+  // Update pop up text. This works because 'title' elements were created in the GUP above for each circle.
   dots
     .select("title")
     .text(function(d) {
@@ -101,13 +116,18 @@ function selectData(selectionId) {
 
   var data_00 = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
   var data_01 = [110, 120, 130, 140];
+  var data_02 = [7, 9, 42];
 
   if(selectionId % 2 === 0) {
     console.log(0);
     return data_00;
-  } else {
+  } else if(selectionId % 3 === 0) {
     console.log(1);
     return data_01;
+  }
+  else {
+    console.log(2);
+    return data_02;
   }
 }
 

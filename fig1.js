@@ -1,3 +1,5 @@
+"use strict";
+
 // GLOBAL STATE
 var w = 600
 var h = 600
@@ -5,7 +7,6 @@ var padding = 50
 var bb = true;
 
 function bodyLoad() {
-  "use strict";
   console.log("bodyLoad");
 
   var data = selectData(0);
@@ -58,7 +59,6 @@ function initializeScatterPlot(data) {
     .call(yAxis)
     ;
 }
-
 
 function updateScatterPlot(data) {
   console.log("updateScatterPlot");

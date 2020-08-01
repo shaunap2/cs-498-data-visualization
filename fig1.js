@@ -1,23 +1,72 @@
 // GLOBAL STATE
+var w = 600
+var h = 600
+var padding = 50
 var bb = true;
 
 function bodyLoad() {
   "use strict";
   console.log("bodyLoad");
 
-  generateFigure(selectData(0));
+  var data = selectData(0);
+  initializeScatterPlot(data)
+  updateScatterPlot(data);
 
   populateSelect();
 }
 
-function generateFigure(data) {
-  console.log("generateFigure");
+function initializeScatterPlot(data) {
+  console.log("initializeScatterPlot");
 
-  var w = 600
-  var h = 600
-  var padding = 50
+  // Define the SVG canvas size.
+  var myfigure = d3.select("#myfigure")
+    .attr("width", w)
+    .attr("height", h)
+    ;
 
   // Define scales.
+  var xScale = d3.scaleLinear()
+    .domain([0, d3.max(data, function(d) { return d; })])
+    .range([padding, w - padding * 2])
+    ;
+
+  var yScale = d3.scaleLinear()
+    .domain([0, d3.max(data, function(d) { return d; })])
+    .range([h - padding, padding])
+    ;
+
+  // Define axes.
+  var xAxis = d3.axisBottom()
+    .scale(xScale)
+    ;
+
+  var yAxis = d3.axisLeft()
+    .scale(yScale)
+    ;
+
+  myfigure
+    .append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + (h - padding) + ")")
+    .call(xAxis)
+    ;
+
+  myfigure
+    .append("g")
+    .attr("class", "y axis")
+    .attr("transform", "translate(" + padding + ",0)")
+    .call(yAxis)
+    ;
+}
+
+
+function updateScatterPlot(data) {
+  console.log("updateScatterPlot");
+
+  // Figure for updating
+  var myfigure = d3.select("#myfigure");
+
+  // Update scales.
   var xScale = d3.scaleLinear()
     .domain([0, d3.max(data, function(d) { return d; })])
     .range([padding, w - padding * 2])
@@ -32,26 +81,9 @@ function generateFigure(data) {
     .domain([0, d3.max(data, function(d) { return d; })])
     .range([0, 10]);
 
-  // Define axes.
-  var xAxis = d3.axisBottom()
-    .scale(xScale)
-    //.ticks(5)
-    ;
-
-  var yAxis = d3.axisLeft()
-    .scale(yScale)
-    //.ticks(5)
-    ;
-
-  // Define the SVG canvas size.
-  var myfigure = d3.select("#myfigure")
-    .attr("width", w)
-    .attr("height", h)
-    ;
-
+  // General Update Pattern
   var dots = myfigure.selectAll("circle").data(data);
 
-  // General Update Pattern
   dots.enter()
     .append("circle")
     .merge(dots)
@@ -74,18 +106,22 @@ function generateFigure(data) {
     .attr("fill", "purple")
     ;
 
-  // Generate axes.
+  // Update axes.
+  var xAxis = d3.axisBottom()
+    .scale(xScale)
+    ;
+
+  var yAxis = d3.axisLeft()
+    .scale(yScale)
+    ;
+
   myfigure
-    .append("g")
-    .attr("class", "x axis")
-    .attr("transform", "translate(0," + (h - padding) + ")")
+    .select("g.x.axis")
     .call(xAxis)
     ;
 
   myfigure
-    .append("g")
-    .attr("class", "y axis")
-    .attr("transform", "translate(" + padding + ",0)")
+    .select("g.y.axis")
     .call(yAxis)
     ;
 
@@ -148,5 +184,5 @@ function populateSelect() {
 function onSelectChange() {
   const newSelection = d3.select("#myselect option:checked").node().value;
   console.log("onSelectChange: " + newSelection);
-  generateFigure(selectData(newSelection));
+  updateScatterPlot(selectData(newSelection));
 }

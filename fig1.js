@@ -180,7 +180,7 @@ function updateScatterPlot(data, logScaleX, logScaleY) {
   dots.transition()
     .duration(2000)
     //.attr("r", function(d) { return aScale(d.value); })
-    .attr("r", 3)
+    .attr("r", 5)
     .attr("cx", function(d, i) { return xScale(d.key); })
     .attr("cy", function(d, i) { return yScale(d.value); })
     .attr("fill", "royalblue")
@@ -276,6 +276,12 @@ function bodyLoadBarChartEarthquakeCountByMonth() {
   console.log("bodyLoadBarChartEarthquakeCountByMonth");
   initializeBarChart(earthquake_count_by_month, true);
   updateBarChart(earthquake_count_by_month, true, true);
+}
+
+function bodyLoadBarChartEarthquakeCountByMagnitude() {
+  console.log("bodyLoadBarChartEarthquakeCountByMagnitude");
+  initializeBarChart(earthquake_count_by_magnitude, false);
+  updateBarChart(earthquake_count_by_magnitude, false, false);
 }
 
 function bodyLoadBarChart() {

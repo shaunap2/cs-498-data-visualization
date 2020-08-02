@@ -65,6 +65,16 @@
 
         <p><strong>Mouse over</strong> individual bars in the chart below to learn more about how many earthquakes happened in each month.</p>
 
+        <form>
+          <div class="form-group">
+            <label for="myselect">Y-Scale Transformation</label>
+            <select class="form-control" id="myselect" onchange="onSelectToggleScaleScatterPlot(earthquake_deaths);" style="max-width: 300px;">
+              <option value="1">Linear Scale</option>
+              <option value="2" selected>Log Scale</option>
+            </select>
+          </div>
+        </form>
+
         <svg id="myfigure" style="background: whitesmoke"></svg>
       </div>
       <div class="col"></div>

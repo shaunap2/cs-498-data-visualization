@@ -235,6 +235,14 @@ function onSelectChangeScatterPlot() {
   updateScatterPlot(selectDataScatterPlot(newSelection));
 }
 
+function onSelectToggleScaleScatterPlot(data) {
+  const newSelection = d3.select("#myselect option:checked").node().value;
+  console.log("onSelectToggleScaleScatterPlot: " + newSelection);
+  //updateScatterPlot(selectDataScatterPlot(newSelection));
+  var useLogScale = parseInt(newSelection) === 2 ? true : false;
+  updateScatterPlot(data, false, useLogScale, true);
+}
+
 /* BAR CHART FUNCTIONS */
 
 function selectDataBarChart(selectionId) {

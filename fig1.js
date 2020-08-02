@@ -3,7 +3,7 @@
 // GLOBAL STATE
 var h = 700;
 var w = 800;
-var padding = 50;
+var padding = 60;
 var minRadius = 3;
 var bb = true;
 
@@ -99,8 +99,6 @@ function initializeScatterPlot(data, logScaleX, logScaleY) {
       .range([h - padding, padding])
       ;
   }
-
-  console.log(yScale(1000));
 
   // Define axes.
   var xAxis = d3.axisBottom()
@@ -496,6 +494,25 @@ function bodyLoadLineChart() {
   populateSelect();
 }
 
+function bodyLoadKeyIndicatorsLineChart() {
+  console.log("bodyLoadKeyIndicatorsLineChart");
+  initializeLineChart(key_indicators_by_country['China']);
+  updateLineChart(key_indicators_by_country['China']);
+  populateKeyIndicatorsSelect();
+}
+
+function populateKeyIndicatorsSelect() {
+  d3.select("#myselect")
+    .selectAll("option")
+    .data(country_select_mapping)
+    .enter()
+    .append("option")
+    .attr("value", function(d) { return d[0]; })
+    .property("selected", function(d) { return d[0] === 'China'; })
+    .text(function(d) { return d[1]; })
+    ;
+}
+
 /* Find max value in 2 deep nested arrays. */
 function findmax(data, level) {
   var max = 0;
@@ -510,11 +527,32 @@ function findmax(data, level) {
   return max;
 }
 
-function initializeLineChart(data) {
+/* Find mine value in 2 deep nested arrays. */
+function findmin(data, level) {
+  var min = 0;
+  for(var i = 0; i < data.length; i++) {
+    for(var j = 0; j < data[i].length; j++) {
+      var temp = data[i][j][level]
+      if(temp < min) {
+        min = temp;
+      }
+    }
+  }
+  return min;
+}
+
+function initializeLineChart(newData, logScaleY) {
   console.log("initializeLineChart");
-  console.log(data);
-  console.log("Xmax: " + findmax(data, 0));
-  console.log("Ymax: " + findmax(data, 1));
+
+  var data = []
+
+  for (var key in newData) {
+    data.push(newData[key]);
+  }
+
+  //console.log(data);
+  //console.log("Xmax: " + findmax(data, 0));
+  //console.log("Ymax: " + findmax(data, 1));
 
   // Define the SVG canvas size.
   var myfigure = d3.select("#myfigure")
@@ -524,7 +562,7 @@ function initializeLineChart(data) {
 
   // Define scales.
   var xScale = d3.scaleLinear()
-    .domain([0, findmax(data, 0)])
+    .domain([1900, findmax(data, 0)])
     .range([padding, w - padding * 2])
     ;
 
@@ -532,6 +570,13 @@ function initializeLineChart(data) {
     .domain([0, findmax(data, 1)])
     .range([h - padding, padding])
     ;
+
+  if(logScaleY) {
+    yScale = d3.scaleSymlog()
+      .domain([0, findmax(data, 1)])
+      .range([h - padding, padding])
+      ;
+  }
 
   // Define axes.
   var xAxis = d3.axisBottom()
@@ -557,15 +602,21 @@ function initializeLineChart(data) {
     ;
 }
 
-function updateLineChart(data) {
+function updateLineChart(newData, logScaleY) {
   console.log("updateLineChart");
+
+  var data = []
+
+  for (var key in newData) {
+    data.push(newData[key]);
+  }
 
   // Figure for updating
   var myfigure = d3.select("#myfigure");
 
   // Update scales.
   var xScale = d3.scaleLinear()
-    .domain([0, findmax(data, 0)])
+    .domain([1900, findmax(data, 0)])
     .range([padding, w - padding * 2])
     ;
 
@@ -573,6 +624,13 @@ function updateLineChart(data) {
     .domain([0, findmax(data, 1)])
     .range([h - padding, padding])
     ;
+
+  if(logScaleY) {
+    yScale = d3.scaleSymlog()
+      .domain([0, findmax(data, 1)])
+      .range([h - padding, padding])
+      ;
+  }
 
   // Helper for line drawing.
   var lineHelper = d3.line()
@@ -622,33 +680,30 @@ function updateLineChart(data) {
     .select("g.y.axis")
     .call(yAxis)
     ;
-
-  // Add mouseover events.
-  /*
-  rects
-    .on("mouseover", function(d) {
-      d3.select(this).attr("fill", bb ? "orange" : "red");
-    })
-    .on("mouseout", function(d) {
-      d3.select(this).attr("fill", "black");
-    })
-    ;
-
-  // Update pop up text. This works because 'title' elements were created in the GUP above for each circle.
-  rects
-    .select("title")
-    .text(function(d) {
-      return "The current value is " + d;
-    })
-    ;
-
-  // Toggle mouseover color for grins.
-  bb = !bb;
-  */
 }
 
 function onSelectChangeLineChart() {
   const newSelection = d3.select("#myselect option:checked").node().value;
   console.log("onSelectChangeLineChart: " + newSelection);
   updateLineChart(selectDataLineChart(newSelection));
+}
+
+function onSelectChangeKeyIndicatorsLineChart() {
+  const newSelection1 = d3.select("#myselect1 option:checked").node().value;
+  var useLogScale = parseInt(newSelection1) === 2 ? true : false;
+
+  const newSelection = d3.select("#myselect option:checked").node().value;
+  console.log("onSelectChangeKeyIndicatorsLineChart: " + newSelection1 + " " + newSelection);
+
+  updateLineChart(key_indicators_by_country[newSelection], useLogScale);
+}
+
+function onSelectToggleScaleLineChart() {
+  const newSelection1 = d3.select("#myselect1 option:checked").node().value;
+  var useLogScale = parseInt(newSelection1) === 2 ? true : false;
+
+  const newSelection = d3.select("#myselect option:checked").node().value;
+  console.log("onSelectToggleScaleLineChart: " + newSelection1 + " " + newSelection);
+
+  updateLineChart(key_indicators_by_country[newSelection], useLogScale);
 }

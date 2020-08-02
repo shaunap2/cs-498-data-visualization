@@ -1,7 +1,7 @@
 "use strict";
 
 // GLOBAL STATE
-var h = 600
+var h = 700
 var w = 800
 var padding = 50
 var bb = true;
@@ -194,16 +194,20 @@ function onSelectChangeScatterPlot() {
 
 function bodyLoadBarChartEarthquakeCountByCountry() {
   console.log("bodyLoadBarChartEarthquakeCountByCountry");
-
-  initializeBarChart(earthquake_count_by_country);
+  initializeBarChart(earthquake_count_by_country, false);
   updateBarChart(earthquake_count_by_country, false, false);
 }
 
 function bodyLoadBarChartEarthquakeCountByRegion() {
   console.log("bodyLoadBarChartEarthquakeCountByRegion");
-
-  initializeBarChart(earthquake_count_by_region);
+  initializeBarChart(earthquake_count_by_region, false);
   updateBarChart(earthquake_count_by_region, false, false);
+}
+
+function bodyLoadBarChartEarthquakeCountByYear() {
+  console.log("bodyLoadBarChartEarthquakeCountByYear");
+  initializeBarChart(earthquake_count_by_year, false);
+  updateBarChart(earthquake_count_by_year, false, false);
 }
 
 function bodyLoadBarChart() {
@@ -329,6 +333,8 @@ function updateBarChart(data, showXaxis, useScaleOrdinal) {
     myfigure
       .select("g.x.axis")
       .call(xAxis)
+      //.selectAll("text")
+      //.attr("transform", "rotate(-90) translate(-20, -10)");
       ;
   }
 

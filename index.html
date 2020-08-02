@@ -20,7 +20,7 @@
   <script src="data.js"></script>
 
 </head>
-<body onload="bodyLoadBarChartEarthquakeCount()">
+<body onload="bodyLoadBarChartEarthquakeCountByCountry()">
   <div class="container">
     <div class="row">
       <div class="col"></div>
@@ -30,7 +30,10 @@
 
         <ul class="nav nav-pills">
           <li class="nav-item">
-            <a class="nav-link active" href="index.html">Figure 1</a>
+            <a class="nav-link active" href="index.html">Earthquakes by Country</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="earthquake_count_by_region.html">Earthquakes by Region</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="fig2.html">Figure 2</a>
@@ -45,7 +48,7 @@
 
         <p></p>
 
-        <p>The following chart shows number of major earthquakes by country.</p>
+        <p><strong>Mouse over</strong> individual bars in the chart below to learn more about how many earthquakes each country has experienced.</p>
 
         <svg id="myfigure" style="background: whitesmoke"></svg>
       </div>

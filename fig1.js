@@ -192,11 +192,18 @@ function onSelectChangeScatterPlot() {
 
 /* BAR CHART FUNCTIONS */
 
-function bodyLoadBarChartEarthquakeCount() {
-  console.log("bodyLoadBarChartEarthquakeCount");
+function bodyLoadBarChartEarthquakeCountByCountry() {
+  console.log("bodyLoadBarChartEarthquakeCountByCountry");
 
-  initializeBarChart(earthquake_count);
-  updateBarChart(earthquake_count, false);
+  initializeBarChart(earthquake_count_by_country);
+  updateBarChart(earthquake_count_by_country, false, false);
+}
+
+function bodyLoadBarChartEarthquakeCountByRegion() {
+  console.log("bodyLoadBarChartEarthquakeCountByRegion");
+
+  initializeBarChart(earthquake_count_by_region);
+  updateBarChart(earthquake_count_by_region, false, false);
 }
 
 function bodyLoadBarChart() {
@@ -204,7 +211,7 @@ function bodyLoadBarChart() {
 
   var data = selectData(0);
   initializeBarChart(data, true)
-  updateBarChart(data, true);
+  updateBarChart(data, true, false);
 
   populateSelect();
 }
@@ -258,7 +265,7 @@ function initializeBarChart(data, showXaxis) {
 
 var barChartMouseOverOriginalColor = "blue";
 
-function updateBarChart(data, showXaxis) {
+function updateBarChart(data, showXaxis, useScaleOrdinal) {
   console.log("updateBarChart");
 
   // Figure for updating
@@ -279,6 +286,12 @@ function updateBarChart(data, showXaxis) {
   var colorScale = d3.scaleSequential(d3.interpolateReds)
     .domain([0, d3.max(data, function(d) { return d.value; })])
     ;
+
+  if(useScaleOrdinal) {
+    colorScale = d3.scaleOrdinal().domain(data.map(function(d) { return d.group; }))
+    .range(d3.schemeSet3)
+    ;
+  }
 
   // General Update Pattern
   var rects = myfigure.selectAll("rect").data(data);
@@ -303,7 +316,7 @@ function updateBarChart(data, showXaxis) {
     .attr("y", function(d) { return yScale(d.value); })
     .attr("width", xScale.bandwidth())
     .attr("height", function(d) { return h - padding - yScale(d.value); })
-    .attr("fill", function(d) { return colorScale(d.value); } )
+    .attr("fill", function(d) { return colorScale(useScaleOrdinal ? d.group : d.value); } )
     .attr("stroke", "grey")
     ;
 
@@ -351,7 +364,7 @@ function updateBarChart(data, showXaxis) {
 function onSelectChangeBarChart() {
   const newSelection = d3.select("#myselect option:checked").node().value;
   console.log("onSelectChangeBarChart: " + newSelection);
-  updateBarChart(selectData(newSelection), true);
+  updateBarChart(selectData(newSelection), true, false);
 }
 
 /* LINE CHART FUNCTIONS */

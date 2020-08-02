@@ -24,10 +24,29 @@ function populateSelect() {
 
 /* SCATTER PLOT FUNCTIONS */
 
+function selectDataScatterPlot(selectionId) {
+  console.log("selectData: " + selectionId);
+
+  var data_00 = [{key: 10, value: 10}, {key: 20, value: 20}, {key: 30, value: 30}, {key: 40, value: 40}, {key: 50, value: 50}, {key: 60, value: 60}, {key: 70, value: 70}, {key: 80, value: 80}, {key: 90, value: 90}, {key: 100, value: 100}];
+  var data_01 = [{key: 110, value: 110}, {key: 120, value: 120}, {key: 130, value: 130}, {key: 140, value: 140}];
+  var data_02 = [{key: 7, value: 7}, {key: 9, value: 9}, {key: 42, value: 42}];
+
+  if(selectionId % 2 === 0) {
+    console.log(0);
+    return data_00;
+  } else if(selectionId % 3 === 0) {
+    console.log(1);
+    return data_01;
+  } else {
+    console.log(2);
+    return data_02;
+  }
+}
+
 function bodyLoadScatterPlot() {
   console.log("bodyLoadScatterPlot");
 
-  var data = selectData(0);
+  var data = selectDataScatterPlot(0);
   initializeScatterPlot(data)
   updateScatterPlot(data);
 
@@ -45,12 +64,12 @@ function initializeScatterPlot(data) {
 
   // Define scales.
   var xScale = d3.scaleLinear()
-    .domain([0, d3.max(data, function(d) { return d; })])
+    .domain([0, d3.max(data, function(d) { return d.key; })])
     .range([padding, w - padding * 2])
     ;
 
   var yScale = d3.scaleLinear()
-    .domain([0, d3.max(data, function(d) { return d; })])
+    .domain([0, d3.max(data, function(d) { return d.value; })])
     .range([h - padding, padding])
     ;
 
@@ -86,17 +105,17 @@ function updateScatterPlot(data) {
 
   // Update scales.
   var xScale = d3.scaleLinear()
-    .domain([0, d3.max(data, function(d) { return d; })])
+    .domain([0, d3.max(data, function(d) { return d.key; })])
     .range([padding, w - padding * 2])
     ;
 
   var yScale = d3.scaleLinear()
-    .domain([0, d3.max(data, function(d) { return d; })])
+    .domain([0, d3.max(data, function(d) { return d.value; })])
     .range([h - padding, padding])
     ;
 
   var aScale = d3.scaleSqrt()
-    .domain([0, d3.max(data, function(d) { return d; })])
+    .domain([0, d3.max(data, function(d) { return d.value; })])
     .range([0, 10]);
 
   // General Update Pattern
@@ -107,7 +126,7 @@ function updateScatterPlot(data) {
     .merge(dots)
     .append("title")
     .text(function(d) {
-      return "The current value is " + d;
+      return d.key + " = " + d.value;
     })
     ;
 
@@ -118,9 +137,9 @@ function updateScatterPlot(data) {
 
   dots.transition()
     .duration(2000)
-    .attr("r", function(d) { return aScale(d); })
-    .attr("cx", function(d, i) { return xScale(d); })
-    .attr("cy", function(d, i) { return yScale(d); })
+    .attr("r", function(d) { return aScale(d.value); })
+    .attr("cx", function(d, i) { return xScale(d.key); })
+    .attr("cy", function(d, i) { return yScale(d.value); })
     .attr("fill", "purple")
     ;
 
@@ -146,10 +165,11 @@ function updateScatterPlot(data) {
   // Add mouseover events.
   dots
     .on("mouseover", function(d) {
-      d3.select(this).attr("fill", bb ? "orange" : "red");
+      barChartMouseOverOriginalColor = d3.select(this).attr("fill");
+      d3.select(this).attr("fill", "red");
     })
     .on("mouseout", function(d) {
-      d3.select(this).attr("fill", "black");
+      d3.select(this).attr("fill", barChartMouseOverOriginalColor);
     })
     ;
 
@@ -157,18 +177,15 @@ function updateScatterPlot(data) {
   dots
     .select("title")
     .text(function(d) {
-      return "The current value is " + d;
+      return d.key + " = " + d.value;
     })
     ;
-
-  // Toggle mouseover color for grins.
-  bb = !bb;
 }
 
 function onSelectChangeScatterPlot() {
   const newSelection = d3.select("#myselect option:checked").node().value;
   console.log("onSelectChangeScatterPlot: " + newSelection);
-  updateScatterPlot(selectData(newSelection));
+  updateScatterPlot(selectDataScatterPlot(newSelection));
 }
 
 /* BAR CHART FUNCTIONS */

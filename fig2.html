@@ -16,14 +16,17 @@
   <!-- Figure Imports -->
   <script src="fig1.js"></script>
 
+  <!-- Data Import -->
+  <script src="data.js"></script>
+
 </head>
-<body onload="bodyLoadScatterPlot()">
+<body onload="bodyLoadBarChart()">
   <div class="container">
     <div class="row">
       <div class="col"></div>
       <div class="col-10">
-        <h3>Global Significant Earthquakes</h3>
-        <p>Scatter Plot</p>
+        <h3>Global Significant Earthquakes Since 1900</h3>
+        <p>Bar Chart</p>
 
         <ul class="nav nav-pills">
           <li class="nav-item">
@@ -35,6 +38,9 @@
           <li class="nav-item">
             <a class="nav-link" href="fig3.html">Figure 3</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="fig4.html">Figure 4</a>
+          </li>
         </ul>
 
         <p></p>
@@ -42,14 +48,14 @@
         <form>
           <div class="form-group">
             <label for="myselect">Select a Country</label>
-            <select class="form-control" id="myselect" onchange="onSelectChangeScatterPlot();" style="max-width: 300px;">
+            <select class="form-control" id="myselect" onchange="onSelectChangeBarChart();" style="max-width: 300px;">
             </select>
           </div>
         </form>
 
         <p></p>
 
-        <svg id="myfigure" style="background: cornsilk"></svg>
+        <svg id="myfigure" style="background: lightgoldenrodyellow"></svg>
       </div>
       <div class="col"></div>
     </div>

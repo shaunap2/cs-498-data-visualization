@@ -20,17 +20,17 @@
   <script src="data.js"></script>
 
 </head>
-<body onload="bodyLoadBarChartEarthquakeCount()">
+<body onload="bodyLoadLineChart()">
   <div class="container">
     <div class="row">
       <div class="col"></div>
       <div class="col-10">
         <h3>Global Significant Earthquakes Since 1900</h3>
-        <p>An exploration of major earthquakes and their impacts.</p>
+        <p>Line Chart</p>
 
         <ul class="nav nav-pills">
           <li class="nav-item">
-            <a class="nav-link active" href="index.html">Figure 1</a>
+            <a class="nav-link" href="index.html">Figure 1</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="fig2.html">Figure 2</a>
@@ -39,15 +39,23 @@
             <a class="nav-link" href="fig3.html">Figure 3</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="fig4.html">Figure 4</a>
+            <a class="nav-link active" href="fig4.html">Figure 4</a>
           </li>
         </ul>
 
         <p></p>
 
-        <p>The following chart shows number of major earthquakes by country.</p>
+        <form>
+          <div class="form-group">
+            <label for="myselect">Select a Country</label>
+            <select class="form-control" id="myselect" onchange="onSelectChangeLineChart();" style="max-width: 300px;">
+            </select>
+          </div>
+        </form>
 
-        <svg id="myfigure" style="background: whitesmoke"></svg>
+        <p></p>
+
+        <svg id="myfigure" style="background: lightgoldenrodyellow"></svg>
       </div>
       <div class="col"></div>
     </div>

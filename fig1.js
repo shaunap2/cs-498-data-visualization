@@ -11,9 +11,9 @@ var bb = true;
 function selectData(selectionId) {
   console.log("selectData: " + selectionId);
 
-  var data_00 = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
-  var data_01 = [110, 120, 130, 140];
-  var data_02 = [7, 9, 42];
+  var data_00 = [{key: "a", value: 10}, {key: "b", value: 20}, {key: "c", value: 30}, {key: "d", value: 40}, {key: "e", value: 50}, {key: "f", value: 60}, {key: "g", value: 70}, {key: "h", value: 80}, {key: "i", value: 90}, {key: "j", value: 100}];
+  var data_01 = [{key: "m", value: 110}, {key: "n", value: 120}, {key: "o", value: 130}, {key: "p", value: 140}];
+  var data_02 = [{key: "x", value: 7}, {key: "y", value: 9}, {key: "z", value: 42}];
 
   if(selectionId % 2 === 0) {
     console.log(0);
@@ -192,17 +192,24 @@ function onSelectChangeScatterPlot() {
 
 /* BAR CHART FUNCTIONS */
 
+function bodyLoadBarChartEarthquakeCount() {
+  console.log("bodyLoadBarChartEarthquakeCount");
+
+  initializeBarChart(earthquake_count);
+  updateBarChart(earthquake_count, false);
+}
+
 function bodyLoadBarChart() {
   console.log("bodyLoadBarChart");
 
   var data = selectData(0);
-  initializeBarChart(data)
-  updateBarChart(data);
+  initializeBarChart(data, true)
+  updateBarChart(data, true);
 
   populateSelect();
 }
 
-function initializeBarChart(data) {
+function initializeBarChart(data, showXaxis) {
   console.log("initializeBarChart");
 
   // Define the SVG canvas size.
@@ -213,30 +220,32 @@ function initializeBarChart(data) {
 
   // Define scales.
   var xScale = d3.scaleBand()
-    .domain(d3.range(data.length))
+    .domain(data.map(function(d) { return d.key; }))
     .rangeRound([padding, w - padding * 2])
     .paddingInner(0.05)
     ;
 
   var yScale = d3.scaleLinear()
-    .domain([0, d3.max(data, function(d) { return d; })])
+    .domain([0, d3.max(data, function(d) { return d.value; })])
     .range([h - padding, padding])
     ;
 
   // Define axes.
-  var xAxis = d3.axisBottom()
-    .scale(xScale)
-    ;
+  if(showXaxis) {
+    var xAxis = d3.axisBottom()
+      .scale(xScale)
+      ;
+
+    myfigure
+      .append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + (h - padding) + ")")
+      .call(xAxis)
+      ;
+  }
 
   var yAxis = d3.axisLeft()
     .scale(yScale)
-    ;
-
-  myfigure
-    .append("g")
-    .attr("class", "x axis")
-    .attr("transform", "translate(0," + (h - padding) + ")")
-    .call(xAxis)
     ;
 
   myfigure
@@ -247,7 +256,9 @@ function initializeBarChart(data) {
     ;
 }
 
-function updateBarChart(data) {
+var barChartMouseOverOriginalColor = "blue";
+
+function updateBarChart(data, showXaxis) {
   console.log("updateBarChart");
 
   // Figure for updating
@@ -255,14 +266,18 @@ function updateBarChart(data) {
 
   // Update scales.
   var xScale = d3.scaleBand()
-    .domain(d3.range(data.length))
+    .domain(data.map(function(d) { return d.key; }))
     .rangeRound([padding, w - padding * 2])
     .paddingInner(0.05)
     ;
 
   var yScale = d3.scaleLinear()
-    .domain([0, d3.max(data, function(d) { return d; })])
+    .domain([0, d3.max(data, function(d) { return d.value; })])
     .range([h - padding, padding])
+    ;
+
+  var colorScale = d3.scaleSequential(d3.interpolateReds)
+    .domain([0, d3.max(data, function(d) { return d.value; })])
     ;
 
   // General Update Pattern
@@ -273,7 +288,7 @@ function updateBarChart(data) {
     .merge(rects)
     .append("title")
     .text(function(d) {
-      return "The current value is " + d;
+      return d.key + " = " + d.value;
     })
     ;
 
@@ -284,25 +299,28 @@ function updateBarChart(data) {
 
   rects.transition()
     .duration(2000)
-    .attr("x", function(d, i) { return xScale(i); })
-    .attr("y", function(d) { return yScale(d); })
+    .attr("x", function(d) { return xScale(d.key); })
+    .attr("y", function(d) { return yScale(d.value); })
     .attr("width", xScale.bandwidth())
-    .attr("height", function(d, i) { return h - padding - yScale(d); })
-    .attr("fill", "yellow")
+    .attr("height", function(d) { return h - padding - yScale(d.value); })
+    .attr("fill", function(d) { return colorScale(d.value); } )
+    .attr("stroke", "grey")
     ;
 
   // Update axes.
-  var xAxis = d3.axisBottom()
-    .scale(xScale)
-    ;
+  if(showXaxis) {
+    var xAxis = d3.axisBottom()
+      .scale(xScale)
+      ;
+
+    myfigure
+      .select("g.x.axis")
+      .call(xAxis)
+      ;
+  }
 
   var yAxis = d3.axisLeft()
     .scale(yScale)
-    ;
-
-  myfigure
-    .select("g.x.axis")
-    .call(xAxis)
     ;
 
   myfigure
@@ -313,10 +331,11 @@ function updateBarChart(data) {
   // Add mouseover events.
   rects
     .on("mouseover", function(d) {
-      d3.select(this).attr("fill", bb ? "orange" : "red");
+      barChartMouseOverOriginalColor = d3.select(this).attr("fill");
+      d3.select(this).attr("fill", "red");
     })
     .on("mouseout", function(d) {
-      d3.select(this).attr("fill", "black");
+      d3.select(this).attr("fill", barChartMouseOverOriginalColor);
     })
     ;
 
@@ -324,18 +343,15 @@ function updateBarChart(data) {
   rects
     .select("title")
     .text(function(d) {
-      return "The current value is " + d;
+      return d.key + " = " + d.value;
     })
     ;
-
-  // Toggle mouseover color for grins.
-  bb = !bb;
 }
 
 function onSelectChangeBarChart() {
   const newSelection = d3.select("#myselect option:checked").node().value;
   console.log("onSelectChangeBarChart: " + newSelection);
-  updateBarChart(selectData(newSelection));
+  updateBarChart(selectData(newSelection), true);
 }
 
 /* LINE CHART FUNCTIONS */

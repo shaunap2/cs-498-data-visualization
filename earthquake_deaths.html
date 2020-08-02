@@ -20,13 +20,13 @@
   <script src="data.js"></script>
 
 </head>
-<body onload="bodyLoadLineChart()">
+<body onload="bodyLoadScatterPlotEarthquakeDeaths()">
   <div class="container">
     <div class="row">
       <div class="col"></div>
       <div class="col-10">
         <h3>Global Significant Earthquakes Since 1900</h3>
-        <p>Line Chart</p>
+        <p>An exploration of major earthquakes and their impacts.</p>
 
         <ul class="nav nav-pills">
           <li class="nav-item">
@@ -45,30 +45,22 @@
             <a class="nav-link" href="earthquake_damage_millions_dollars.html">Damage by Magnitude</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="earthquake_deaths.html">Deaths by Magnitude</a>
+            <a class="nav-link active" href="earthquake_deaths.html">Deaths by Magnitude</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="fig2.html">Figure 2</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="fig3.html">Figure 3</a>
+            <a class="nav-link disabled" href="fig3.html">Figure 3</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" href="fig4.html">Figure 4</a>
+            <a class="nav-link disabled" href="fig4.html">Figure 4</a>
           </li>
         </ul>
 
         <p></p>
 
-        <form>
-          <div class="form-group">
-            <label for="myselect">Select a Country</label>
-            <select class="form-control" id="myselect" onchange="onSelectChangeLineChart();" style="max-width: 300px;">
-            </select>
-          </div>
-        </form>
-
-        <p></p>
+        <p><strong>Mouse over</strong> individual bars in the chart below to learn more about how many earthquakes happened in each month.</p>
 
         <svg id="myfigure" style="background: whitesmoke"></svg>
       </div>

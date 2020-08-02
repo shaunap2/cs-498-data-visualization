@@ -55,10 +55,14 @@ function bodyLoadScatterPlot() {
 
 function bodyLoadScatterPlotEarthquakeDamageMillionsDollars() {
   console.log("bodyLoadScatterPlotEarthquakeDamageMillionsDollars");
-  //initializeScatterPlot(earthquake_damage_millions_of_dollars, true, true)
-  //updateScatterPlot(earthquake_damage_millions_of_dollars, true, true);
   initializeScatterPlot(earthquake_damage_millions_of_dollars, false, true)
   updateScatterPlot(earthquake_damage_millions_of_dollars, false, true);
+}
+
+function bodyLoadScatterPlotEarthquakeDeaths() {
+  console.log("bodyLoadScatterPlotEarthquakeDeaths");
+  initializeScatterPlot(earthquake_deaths, false, true)
+  updateScatterPlot(earthquake_deaths, false, true);
 }
 
 function initializeScatterPlot(data, logScaleX, logScaleY) {

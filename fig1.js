@@ -1,9 +1,10 @@
 "use strict";
 
 // GLOBAL STATE
-var h = 700
-var w = 800
-var padding = 50
+var h = 700;
+var w = 800;
+var padding = 50;
+var minRadius = 3;
 var bb = true;
 
 /* SHARED */
@@ -56,13 +57,13 @@ function bodyLoadScatterPlot() {
 function bodyLoadScatterPlotEarthquakeDamageMillionsDollars() {
   console.log("bodyLoadScatterPlotEarthquakeDamageMillionsDollars");
   initializeScatterPlot(earthquake_damage_millions_of_dollars, false, true)
-  updateScatterPlot(earthquake_damage_millions_of_dollars, false, true);
+  updateScatterPlot(earthquake_damage_millions_of_dollars, false, true, true);
 }
 
 function bodyLoadScatterPlotEarthquakeDeaths() {
   console.log("bodyLoadScatterPlotEarthquakeDeaths");
   initializeScatterPlot(earthquake_deaths, false, true)
-  updateScatterPlot(earthquake_deaths, false, true);
+  updateScatterPlot(earthquake_deaths, false, true, true);
 }
 
 function initializeScatterPlot(data, logScaleX, logScaleY) {
@@ -125,7 +126,7 @@ function initializeScatterPlot(data, logScaleX, logScaleY) {
     ;
 }
 
-function updateScatterPlot(data, logScaleX, logScaleY) {
+function updateScatterPlot(data, logScaleX, logScaleY, useGroupForRadius) {
   console.log("updateScatterPlot");
 
   // Figure for updating
@@ -168,7 +169,7 @@ function updateScatterPlot(data, logScaleX, logScaleY) {
     .merge(dots)
     .append("title")
     .text(function(d) {
-      return d.key + " = " + d.value;
+      return d.key + " = " + d.value + (d.group !== d.key ? " ; " + d.group : "");
     })
     ;
 
@@ -179,8 +180,11 @@ function updateScatterPlot(data, logScaleX, logScaleY) {
 
   dots.transition()
     .duration(2000)
-    //.attr("r", function(d) { return aScale(d.value); })
-    .attr("r", 5)
+    .attr("r", function(d) {
+      // Do not return a miniscule small radius.
+      var radius = useGroupForRadius ? aScale(d.value) : minRadius;
+      return radius < minRadius  ? minRadius : radius; }
+    )
     .attr("cx", function(d, i) { return xScale(d.key); })
     .attr("cy", function(d, i) { return yScale(d.value); })
     .attr("fill", "royalblue")
@@ -220,7 +224,7 @@ function updateScatterPlot(data, logScaleX, logScaleY) {
   dots
     .select("title")
     .text(function(d) {
-      return d.key + " = " + d.value;
+      return d.key + " = " + d.value + (d.group !== d.key ? " ; " + d.group : "");
     })
     ;
 }

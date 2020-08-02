@@ -1,8 +1,8 @@
 "use strict";
 
 // GLOBAL STATE
-var w = 600
 var h = 600
+var w = 800
 var padding = 50
 var bb = true;
 
@@ -336,4 +336,196 @@ function onSelectChangeBarChart() {
   const newSelection = d3.select("#myselect option:checked").node().value;
   console.log("onSelectChangeBarChart: " + newSelection);
   updateBarChart(selectData(newSelection));
+}
+
+/* LINE CHART FUNCTIONS */
+
+function selectDataLineChart(selectionId) {
+  console.log("selectData: " + selectionId);
+
+  var data_00 = [
+    [[10, 20], [30, 40], [50, 60], [70, 80], [90, 100]],
+    [[110, 120], [130, 140], [180, 10]],
+    [[7, 9], [42, 44], [250, 180], [300,4]]
+  ];
+
+
+  var data_01 = [
+    [[30, 50], [70, 80], [90, 10], [110, 44], [150, 200]],
+    [[5, 120], [20, 140], [80, 10]],
+    [[7, 99], [142, 44], [189, 180], [200,45]]
+  ];
+
+  if(selectionId % 2 === 0) {
+    console.log(0);
+    return data_00;
+  } else {
+    console.log(1);
+    return data_01;
+  }
+}
+
+function bodyLoadLineChart() {
+  console.log("bodyLoadLineChart");
+
+  var data = selectDataLineChart(0);
+  initializeLineChart(data)
+  updateLineChart(data);
+
+  populateSelect();
+}
+
+/* Find max value in 2 deep nested arrays. */
+function findmax(data, level) {
+  var max = 0;
+  for(var i = 0; i < data.length; i++) {
+    for(var j = 0; j < data[i].length; j++) {
+      var temp = data[i][j][level]
+      if(temp > max) {
+        max = temp;
+      }
+    }
+  }
+  return max;
+}
+
+function initializeLineChart(data) {
+  console.log("initializeLineChart");
+  console.log(data);
+  console.log("Xmax: " + findmax(data, 0));
+  console.log("Ymax: " + findmax(data, 1));
+
+  // Define the SVG canvas size.
+  var myfigure = d3.select("#myfigure")
+    .attr("width", w)
+    .attr("height", h)
+    ;
+
+  // Define scales.
+  var xScale = d3.scaleLinear()
+    .domain([0, findmax(data, 0)])
+    .range([padding, w - padding * 2])
+    ;
+
+  var yScale = d3.scaleLinear()
+    .domain([0, findmax(data, 1)])
+    .range([h - padding, padding])
+    ;
+
+  // Define axes.
+  var xAxis = d3.axisBottom()
+    .scale(xScale)
+    ;
+
+  var yAxis = d3.axisLeft()
+    .scale(yScale)
+    ;
+
+  myfigure
+    .append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + (h - padding) + ")")
+    .call(xAxis)
+    ;
+
+  myfigure
+    .append("g")
+    .attr("class", "y axis")
+    .attr("transform", "translate(" + padding + ",0)")
+    .call(yAxis)
+    ;
+}
+
+function updateLineChart(data) {
+  console.log("updateLineChart");
+
+  // Figure for updating
+  var myfigure = d3.select("#myfigure");
+
+  // Update scales.
+  var xScale = d3.scaleLinear()
+    .domain([0, findmax(data, 0)])
+    .range([padding, w - padding * 2])
+    ;
+
+  var yScale = d3.scaleLinear()
+    .domain([0, findmax(data, 1)])
+    .range([h - padding, padding])
+    ;
+
+  // Helper for line drawing.
+  var lineHelper = d3.line()
+    .curve(d3.curveLinear)
+    .x(function(d){ return xScale(d[0]); })
+    .y(function(d){ return yScale(d[1]); })
+    ;
+
+  // General Update Pattern
+  var lines = myfigure.selectAll(".line").data(data);
+
+  lines.enter()
+    .append("path")
+    .attr("class", "line")
+    .merge(lines)
+    ;
+
+  lines.exit().remove();
+
+  // Apply transition on figure load. Done here to avoid delays in tool tip pop ups.
+  lines = myfigure.selectAll(".line");
+
+  lines.transition()
+    .duration(2000)
+    .attr("d", lineHelper)
+    .attr("stroke", function(d, i) { return ["red", "purple", "green"][i]})
+    .attr("fill", "none")
+    ;
+
+  // Update axes.
+  var xAxis = d3.axisBottom()
+    .scale(xScale)
+    ;
+
+  var yAxis = d3.axisLeft()
+    .scale(yScale)
+    ;
+
+  myfigure
+    .select("g.x.axis")
+    .call(xAxis)
+    ;
+
+  myfigure
+    .select("g.y.axis")
+    .call(yAxis)
+    ;
+
+  // Add mouseover events.
+  /*
+  rects
+    .on("mouseover", function(d) {
+      d3.select(this).attr("fill", bb ? "orange" : "red");
+    })
+    .on("mouseout", function(d) {
+      d3.select(this).attr("fill", "black");
+    })
+    ;
+
+  // Update pop up text. This works because 'title' elements were created in the GUP above for each circle.
+  rects
+    .select("title")
+    .text(function(d) {
+      return "The current value is " + d;
+    })
+    ;
+
+  // Toggle mouseover color for grins.
+  bb = !bb;
+  */
+}
+
+function onSelectChangeLineChart() {
+  const newSelection = d3.select("#myselect option:checked").node().value;
+  console.log("onSelectChangeLineChart: " + newSelection);
+  updateLineChart(selectDataLineChart(newSelection));
 }

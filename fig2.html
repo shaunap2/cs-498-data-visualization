@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Figure 2</title>
+  <title>My Amazing Viz</title>
 
   <!-- D3 -->
   <script src="https://d3js.org/d3.v5.min.js"></script>
@@ -18,33 +18,41 @@
 
 </head>
 <body onload="bodyLoadScatterPlot()">
-  <h3>Global Significant Earthquakes Since 2150 BCE</h3>
-  <p>Scatter Chart</p>
+  <div class="container">
+    <div class="row">
+      <div class="col"></div>
+      <div class="col-10">
+        <h3>Global Significant Earthquakes</h3>
+        <p>Scatter Plot</p>
 
-  <ul class="nav nav-pills">
-    <li class="nav-item">
-      <a class="nav-link" href="index.html">Figure 1</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link active" href="fig2.html">Figure 2</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="fig3.html">Figure 3</a>
-    </li>
-  </ul>
+        <ul class="nav nav-pills">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Figure 1</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="fig2.html">Figure 2</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="fig3.html">Figure 3</a>
+          </li>
+        </ul>
 
-  <p></p>
+        <p></p>
 
-  <form>
-    <div class="form-group">
-      <label for="myselect">Select a Country</label>
-      <select class="form-control" id="myselect" onchange="onSelectChangeScatterPlot();" style="max-width: 300px;">
-      </select>
+        <form>
+          <div class="form-group">
+            <label for="myselect">Select a Country</label>
+            <select class="form-control" id="myselect" onchange="onSelectChangeScatterPlot();" style="max-width: 300px;">
+            </select>
+          </div>
+        </form>
+
+        <p></p>
+
+        <svg id="myfigure" style="background: cornsilk"></svg>
+      </div>
+      <div class="col"></div>
     </div>
-  </form>
-
-  <p></p>
-
-  <svg id="myfigure" style="background: cornsilk"></svg>
+  </div>
 </body>
 </html>

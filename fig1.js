@@ -456,6 +456,7 @@ function updateLineChart(data) {
   // Helper for line drawing.
   var lineHelper = d3.line()
     .curve(d3.curveLinear)
+    //.curve(d3.curveMonotoneX)
     .x(function(d){ return xScale(d[0]); })
     .y(function(d){ return yScale(d[1]); })
     ;
@@ -479,6 +480,7 @@ function updateLineChart(data) {
     .attr("d", lineHelper)
     .attr("stroke", function(d, i) { return ["red", "purple", "green"][i]})
     .attr("fill", "none")
+    .attr("stroke-width", 3)
     ;
 
   // Update axes.

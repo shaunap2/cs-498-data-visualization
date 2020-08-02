@@ -53,7 +53,15 @@ function bodyLoadScatterPlot() {
   populateSelect();
 }
 
-function initializeScatterPlot(data) {
+function bodyLoadScatterPlotEarthquakeDamageMillionsDollars() {
+  console.log("bodyLoadScatterPlotEarthquakeDamageMillionsDollars");
+  //initializeScatterPlot(earthquake_damage_millions_of_dollars, true, true)
+  //updateScatterPlot(earthquake_damage_millions_of_dollars, true, true);
+  initializeScatterPlot(earthquake_damage_millions_of_dollars, false, true)
+  updateScatterPlot(earthquake_damage_millions_of_dollars, false, true);
+}
+
+function initializeScatterPlot(data, logScaleX, logScaleY) {
   console.log("initializeScatterPlot");
 
   // Define the SVG canvas size.
@@ -68,10 +76,26 @@ function initializeScatterPlot(data) {
     .range([padding, w - padding * 2])
     ;
 
+  if(logScaleX) {
+    xScale = d3.scaleSymlog()
+      .domain([0, d3.max(data, function(d) { return d.key; })])
+      .range([padding, w - padding * 2])
+      ;
+  }
+
   var yScale = d3.scaleLinear()
     .domain([0, d3.max(data, function(d) { return d.value; })])
     .range([h - padding, padding])
     ;
+
+  if(logScaleY) {
+    yScale = d3.scaleSymlog()
+      .domain([0, d3.max(data, function(d) { return d.value; })])
+      .range([h - padding, padding])
+      ;
+  }
+
+  console.log(yScale(1000));
 
   // Define axes.
   var xAxis = d3.axisBottom()
@@ -97,7 +121,7 @@ function initializeScatterPlot(data) {
     ;
 }
 
-function updateScatterPlot(data) {
+function updateScatterPlot(data, logScaleX, logScaleY) {
   console.log("updateScatterPlot");
 
   // Figure for updating
@@ -109,10 +133,24 @@ function updateScatterPlot(data) {
     .range([padding, w - padding * 2])
     ;
 
+  if(logScaleX) {
+    xScale = d3.scaleSymlog()
+      .domain([0, d3.max(data, function(d) { return d.key; })])
+      .range([padding, w - padding * 2])
+      ;
+  }
+
   var yScale = d3.scaleLinear()
     .domain([0, d3.max(data, function(d) { return d.value; })])
     .range([h - padding, padding])
     ;
+
+  if(logScaleY) {
+    yScale = d3.scaleSymlog()
+      .domain([0, d3.max(data, function(d) { return d.value; })])
+      .range([h - padding, padding])
+      ;
+  }
 
   var aScale = d3.scaleSqrt()
     .domain([0, d3.max(data, function(d) { return d.value; })])
@@ -137,10 +175,11 @@ function updateScatterPlot(data) {
 
   dots.transition()
     .duration(2000)
-    .attr("r", function(d) { return aScale(d.value); })
+    //.attr("r", function(d) { return aScale(d.value); })
+    .attr("r", 3)
     .attr("cx", function(d, i) { return xScale(d.key); })
     .attr("cy", function(d, i) { return yScale(d.value); })
-    .attr("fill", "purple")
+    .attr("fill", "royalblue")
     ;
 
   // Update axes.
@@ -222,9 +261,17 @@ function bodyLoadBarChartEarthquakeCountByRegion() {
 }
 
 function bodyLoadBarChartEarthquakeCountByYear() {
+  //earthquake_count_by_year_natural_order
+  //earthquake_count_by_year_sorted_count
   console.log("bodyLoadBarChartEarthquakeCountByYear");
-  initializeBarChart(earthquake_count_by_year, false);
-  updateBarChart(earthquake_count_by_year, false, false);
+  initializeBarChart(earthquake_count_by_year_natural_order, false);
+  updateBarChart(earthquake_count_by_year_natural_order, false, false);
+}
+
+function bodyLoadBarChartEarthquakeCountByMonth() {
+  console.log("bodyLoadBarChartEarthquakeCountByMonth");
+  initializeBarChart(earthquake_count_by_month, true);
+  updateBarChart(earthquake_count_by_month, true, true);
 }
 
 function bodyLoadBarChart() {

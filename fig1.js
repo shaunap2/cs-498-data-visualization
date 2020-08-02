@@ -8,25 +8,6 @@ var bb = true;
 
 /* SHARED */
 
-function selectData(selectionId) {
-  console.log("selectData: " + selectionId);
-
-  var data_00 = [{key: "a", value: 10}, {key: "b", value: 20}, {key: "c", value: 30}, {key: "d", value: 40}, {key: "e", value: 50}, {key: "f", value: 60}, {key: "g", value: 70}, {key: "h", value: 80}, {key: "i", value: 90}, {key: "j", value: 100}];
-  var data_01 = [{key: "m", value: 110}, {key: "n", value: 120}, {key: "o", value: 130}, {key: "p", value: 140}];
-  var data_02 = [{key: "x", value: 7}, {key: "y", value: 9}, {key: "z", value: 42}];
-
-  if(selectionId % 2 === 0) {
-    console.log(0);
-    return data_00;
-  } else if(selectionId % 3 === 0) {
-    console.log(1);
-    return data_01;
-  } else {
-    console.log(2);
-    return data_02;
-  }
-}
-
 function populateSelect() {
   var data = [[1, 'foobarbaz'], [2, 'abc'], [3, 'def'], [4, 'ghi'], [5, 'jkl'], [6, 'mno']];
 
@@ -192,6 +173,25 @@ function onSelectChangeScatterPlot() {
 
 /* BAR CHART FUNCTIONS */
 
+function selectDataBarChart(selectionId) {
+  console.log("selectData: " + selectionId);
+
+  var data_00 = [{key: "a", value: 10}, {key: "b", value: 20}, {key: "c", value: 30}, {key: "d", value: 40}, {key: "e", value: 50}, {key: "f", value: 60}, {key: "g", value: 70}, {key: "h", value: 80}, {key: "i", value: 90}, {key: "j", value: 100}];
+  var data_01 = [{key: "m", value: 110}, {key: "n", value: 120}, {key: "o", value: 130}, {key: "p", value: 140}];
+  var data_02 = [{key: "x", value: 7}, {key: "y", value: 9}, {key: "z", value: 42}];
+
+  if(selectionId % 2 === 0) {
+    console.log(0);
+    return data_00;
+  } else if(selectionId % 3 === 0) {
+    console.log(1);
+    return data_01;
+  } else {
+    console.log(2);
+    return data_02;
+  }
+}
+
 function bodyLoadBarChartEarthquakeCountByCountry() {
   console.log("bodyLoadBarChartEarthquakeCountByCountry");
   initializeBarChart(earthquake_count_by_country, false);
@@ -213,7 +213,7 @@ function bodyLoadBarChartEarthquakeCountByYear() {
 function bodyLoadBarChart() {
   console.log("bodyLoadBarChart");
 
-  var data = selectData(0);
+  var data = selectDataBarChart(0);
   initializeBarChart(data, true)
   updateBarChart(data, true, false);
 
@@ -370,7 +370,7 @@ function updateBarChart(data, showXaxis, useScaleOrdinal) {
 function onSelectChangeBarChart() {
   const newSelection = d3.select("#myselect option:checked").node().value;
   console.log("onSelectChangeBarChart: " + newSelection);
-  updateBarChart(selectData(newSelection), true, false);
+  updateBarChart(selectDataBarChart(newSelection), true, false);
 }
 
 /* LINE CHART FUNCTIONS */

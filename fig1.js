@@ -5,6 +5,7 @@ var h = 700;
 var w = 800;
 var padding = 60;
 var minRadius = 3;
+var hoverColor = "royalblue"
 var bb = true;
 
 /* SHARED */
@@ -211,7 +212,7 @@ function updateScatterPlot(data, logScaleX, logScaleY, useGroupForRadius) {
   dots
     .on("mouseover", function(d) {
       barChartMouseOverOriginalColor = d3.select(this).attr("fill");
-      d3.select(this).attr("fill", "red");
+      d3.select(this).attr("fill", hoverColor);
     })
     .on("mouseout", function(d) {
       d3.select(this).attr("fill", barChartMouseOverOriginalColor);
@@ -265,33 +266,31 @@ function selectDataBarChart(selectionId) {
 function bodyLoadBarChartEarthquakeCountByCountry() {
   console.log("bodyLoadBarChartEarthquakeCountByCountry");
   initializeBarChart(earthquake_count_by_country, false);
-  updateBarChart(earthquake_count_by_country, false, false);
+  updateBarChart(earthquake_count_by_country, false, false, "Earthquake Count by Country", "Country", "Total Number of Earthquakes");
 }
 
 function bodyLoadBarChartEarthquakeCountByRegion() {
   console.log("bodyLoadBarChartEarthquakeCountByRegion");
   initializeBarChart(earthquake_count_by_region, false);
-  updateBarChart(earthquake_count_by_region, false, false);
+  updateBarChart(earthquake_count_by_region, false, false, "Earthquake Count by Region", "Region", "Total Number of Earthquakes");
 }
 
 function bodyLoadBarChartEarthquakeCountByYear() {
-  //earthquake_count_by_year_natural_order
-  //earthquake_count_by_year_sorted_count
   console.log("bodyLoadBarChartEarthquakeCountByYear");
   initializeBarChart(earthquake_count_by_year_natural_order, false);
-  updateBarChart(earthquake_count_by_year_natural_order, false, false);
+  updateBarChart(earthquake_count_by_year_natural_order, false, false, "Earthquake Count by Year", "Year", "Total Number of Earthquakes");
 }
 
 function bodyLoadBarChartEarthquakeCountByMonth() {
   console.log("bodyLoadBarChartEarthquakeCountByMonth");
   initializeBarChart(earthquake_count_by_month, true);
-  updateBarChart(earthquake_count_by_month, true, true);
+  updateBarChart(earthquake_count_by_month, true, true, "Earthquake Count by Month", "Month", "Total Number of Earthquakes");
 }
 
 function bodyLoadBarChartEarthquakeCountByMagnitude() {
   console.log("bodyLoadBarChartEarthquakeCountByMagnitude");
   initializeBarChart(earthquake_count_by_magnitude, false);
-  updateBarChart(earthquake_count_by_magnitude, false, false);
+  updateBarChart(earthquake_count_by_magnitude, false, false, "Earthquake Count by Magnitude", "Magnitude", "Total Number of Earthquakes");
 }
 
 function bodyLoadBarChart() {
@@ -331,6 +330,12 @@ function initializeBarChart(data, showXaxis) {
       .scale(xScale)
       ;
 
+    /*
+    if(!showXaxis) {
+      xAxis = xAxis.ticks(5);
+    }
+    */
+
     myfigure
       .append("g")
       .attr("class", "x axis")
@@ -353,7 +358,7 @@ function initializeBarChart(data, showXaxis) {
 
 var barChartMouseOverOriginalColor = "blue";
 
-function updateBarChart(data, showXaxis, useScaleOrdinal) {
+function updateBarChart(data, showXaxis, useScaleOrdinal, plotTitle, xLabel, yLabel) {
   console.log("updateBarChart");
 
   // Figure for updating
@@ -377,7 +382,8 @@ function updateBarChart(data, showXaxis, useScaleOrdinal) {
 
   if(useScaleOrdinal) {
     colorScale = d3.scaleOrdinal().domain(data.map(function(d) { return d.group; }))
-    .range(d3.schemeSet3)
+    //.range(d3.schemeSet3)
+    .range(d3.schemeTableau10)
     ;
   }
 
@@ -412,7 +418,14 @@ function updateBarChart(data, showXaxis, useScaleOrdinal) {
   if(showXaxis) {
     var xAxis = d3.axisBottom()
       .scale(xScale)
+
       ;
+
+    /*
+    if(!showXaxis) {
+      xAxis = xAxis.ticks(5);
+    }
+    */
 
     myfigure
       .select("g.x.axis")
@@ -435,7 +448,7 @@ function updateBarChart(data, showXaxis, useScaleOrdinal) {
   rects
     .on("mouseover", function(d) {
       barChartMouseOverOriginalColor = d3.select(this).attr("fill");
-      d3.select(this).attr("fill", "red");
+      d3.select(this).attr("fill", hoverColor);
     })
     .on("mouseout", function(d) {
       d3.select(this).attr("fill", barChartMouseOverOriginalColor);
@@ -449,6 +462,45 @@ function updateBarChart(data, showXaxis, useScaleOrdinal) {
       return d.key + " = " + d.value;
     })
     ;
+
+  // Add Title and Labels
+  d3.select(".mytitle").remove();
+
+  myfigure.append("text")
+    .attr("class", "mytitle")
+    .attr("x", (w / 2))
+    .attr("y", (padding / 3))
+    .attr("text-anchor", "middle")
+    .style("font-size", "16px")
+    .style("text-decoration", "underline")
+    .text(plotTitle);
+
+  d3.select(".myxlabel").remove();
+
+  myfigure.append("text")
+    .attr("class", "myxlabel")
+    .attr("x", (w / 2))
+    .attr("y", h - (padding / 3))
+    .attr("text-anchor", "middle")
+    .style("font-size", "12px")
+    .text(xLabel);
+
+  d3.select(".myylabel").remove();
+
+console.log(h/2);
+console.log(padding);
+
+  myfigure.append("text")
+    .attr("class", "myylabel")
+    //.attr("x", (padding / 3))
+    //.attr("y", (h / 2))
+    .attr("x", 0)
+    .attr("y", 0)
+    .attr("text-anchor", "middle")
+    .attr("transform", "translate(" + (padding / 3) + "," + (h / 2) +") rotate(-90)")
+    .style("font-size", "12px")
+    .text(yLabel);
+
 }
 
 function onSelectChangeBarChart() {
@@ -496,8 +548,8 @@ function bodyLoadLineChart() {
 
 function bodyLoadKeyIndicatorsLineChart() {
   console.log("bodyLoadKeyIndicatorsLineChart");
-  initializeLineChart(key_indicators_by_country['China']);
-  updateLineChart(key_indicators_by_country['China']);
+  initializeLineChart(key_indicators_by_country['China'], true);
+  updateLineChart(key_indicators_by_country['China'], true);
   populateKeyIndicatorsSelect();
 }
 
@@ -659,7 +711,7 @@ function updateLineChart(newData, logScaleY) {
     .attr("d", lineHelper)
     .attr("stroke", function(d, i) { return ["red", "purple", "green"][i]})
     .attr("fill", "none")
-    .attr("stroke-width", 3)
+    .attr("stroke-width", 2)
     ;
 
   // Update axes.

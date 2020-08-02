@@ -3,7 +3,7 @@
 // GLOBAL STATE
 var h = 700;
 var w = 800;
-var padding = 60;
+var padding = 80;
 var minRadius = 3;
 var hoverColor = "royalblue"
 var bb = true;
@@ -58,13 +58,13 @@ function bodyLoadScatterPlot() {
 function bodyLoadScatterPlotEarthquakeDamageMillionsDollars() {
   console.log("bodyLoadScatterPlotEarthquakeDamageMillionsDollars");
   initializeScatterPlot(earthquake_damage_millions_of_dollars, false, true)
-  updateScatterPlot(earthquake_damage_millions_of_dollars, false, true, true);
+  updateScatterPlot(earthquake_damage_millions_of_dollars, false, true, true, "Damage in Millions of Dollars by Magnitude", "Magnitude", "Damage in Millions of Dollars");
 }
 
 function bodyLoadScatterPlotEarthquakeDeaths() {
   console.log("bodyLoadScatterPlotEarthquakeDeaths");
   initializeScatterPlot(earthquake_deaths, false, true)
-  updateScatterPlot(earthquake_deaths, false, true, true);
+  updateScatterPlot(earthquake_deaths, false, true, true, "Number of Deaths by Magnitude", "Magnitude", "Number of Deaths");
 }
 
 function initializeScatterPlot(data, logScaleX, logScaleY) {
@@ -125,7 +125,7 @@ function initializeScatterPlot(data, logScaleX, logScaleY) {
     ;
 }
 
-function updateScatterPlot(data, logScaleX, logScaleY, useGroupForRadius) {
+function updateScatterPlot(data, logScaleX, logScaleY, useGroupForRadius, plotTitle, xLabel, yLabel) {
   console.log("updateScatterPlot");
 
   // Figure for updating
@@ -186,7 +186,7 @@ function updateScatterPlot(data, logScaleX, logScaleY, useGroupForRadius) {
     )
     .attr("cx", function(d, i) { return xScale(d.key); })
     .attr("cy", function(d, i) { return yScale(d.value); })
-    .attr("fill", "royalblue")
+    .attr("fill", "firebrick")
     ;
 
   // Update axes.
@@ -226,6 +226,41 @@ function updateScatterPlot(data, logScaleX, logScaleY, useGroupForRadius) {
       return d.key + " = " + d.value + (d.group !== d.key ? " ; " + d.group : "");
     })
     ;
+
+  // Add Title and Labels
+  d3.selectAll(".mytitle").remove();
+
+  myfigure.append("text")
+    .attr("class", "mytitle")
+    .attr("x", (w / 2))
+    .attr("y", (padding / 3))
+    .attr("text-anchor", "middle")
+    .style("font-size", "16px")
+    .style("text-decoration", "underline")
+    .text(plotTitle);
+
+  d3.select(".myxlabel").remove();
+
+  myfigure.append("text")
+    .attr("class", "myxlabel")
+    .attr("x", (w / 2))
+    .attr("y", h - (padding / 3))
+    .attr("text-anchor", "middle")
+    .style("font-size", "12px")
+    .text(xLabel);
+
+  d3.select(".myylabel").remove();
+
+  myfigure.append("text")
+    .attr("class", "myylabel")
+    //.attr("x", (padding / 3))
+    //.attr("y", (h / 2))
+    .attr("x", 0)
+    .attr("y", 0)
+    .attr("text-anchor", "middle")
+    .attr("transform", "translate(" + (padding / 3) + "," + (h / 2) +") rotate(-90)")
+    .style("font-size", "12px")
+    .text(yLabel);
 }
 
 function onSelectChangeScatterPlot() {
@@ -234,12 +269,18 @@ function onSelectChangeScatterPlot() {
   updateScatterPlot(selectDataScatterPlot(newSelection));
 }
 
-function onSelectToggleScaleScatterPlot(data) {
+function onSelectToggleScaleScatterPlotEarthquakeDeaths(data) {
   const newSelection = d3.select("#myselect option:checked").node().value;
-  console.log("onSelectToggleScaleScatterPlot: " + newSelection);
-  //updateScatterPlot(selectDataScatterPlot(newSelection));
+  console.log("onSelectToggleScaleScatterPlotEarthquakeDeaths: " + newSelection);
   var useLogScale = parseInt(newSelection) === 2 ? true : false;
-  updateScatterPlot(data, false, useLogScale, true);
+  updateScatterPlot(earthquake_deaths, false, useLogScale, true, "Number of Deaths by Magnitude", "Magnitude", "Number of Deaths");
+}
+
+function onSelectToggleScaleScatterPlotEarthquakeDamageMillionsDollars() {
+  const newSelection = d3.select("#myselect option:checked").node().value;
+  console.log("onSelectToggleScaleScatterPlotEarthquakeDamageMillionsDollars: " + newSelection);
+  var useLogScale = parseInt(newSelection) === 2 ? true : false;
+  updateScatterPlot(earthquake_damage_millions_of_dollars, false, useLogScale, true, "Damage in Millions of Dollars by Magnitude", "Magnitude", "Damage in Millions of Dollars");
 }
 
 /* BAR CHART FUNCTIONS */
@@ -487,9 +528,6 @@ function updateBarChart(data, showXaxis, useScaleOrdinal, plotTitle, xLabel, yLa
 
   d3.select(".myylabel").remove();
 
-console.log(h/2);
-console.log(padding);
-
   myfigure.append("text")
     .attr("class", "myylabel")
     //.attr("x", (padding / 3))
@@ -500,7 +538,6 @@ console.log(padding);
     .attr("transform", "translate(" + (padding / 3) + "," + (h / 2) +") rotate(-90)")
     .style("font-size", "12px")
     .text(yLabel);
-
 }
 
 function onSelectChangeBarChart() {

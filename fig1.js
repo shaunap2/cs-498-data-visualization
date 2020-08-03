@@ -586,7 +586,7 @@ function bodyLoadLineChart() {
 function bodyLoadKeyIndicatorsLineChart() {
   console.log("bodyLoadKeyIndicatorsLineChart");
   initializeLineChart(key_indicators_by_country['China'], true);
-  updateLineChart(key_indicators_by_country['China'], true);
+  updateLineChart('China', key_indicators_by_country['China'], true);
   populateKeyIndicatorsSelect();
 }
 
@@ -691,7 +691,7 @@ function initializeLineChart(newData, logScaleY) {
     ;
 }
 
-function updateLineChart(newData, logScaleY) {
+function updateLineChart(country, newData, logScaleY) {
   console.log("updateLineChart");
 
   var data = []
@@ -769,6 +769,41 @@ function updateLineChart(newData, logScaleY) {
     .select("g.y.axis")
     .call(yAxis)
     ;
+
+  // Add Title and Labels
+  d3.select(".mytitle").remove();
+
+  myfigure.append("text")
+    .attr("class", "mytitle")
+    .attr("x", (w / 2))
+    .attr("y", (padding / 3))
+    .attr("text-anchor", "middle")
+    .style("font-size", "16px")
+    .style("text-decoration", "underline")
+    .text("Key Indicators: " + country);
+
+  d3.select(".myxlabel").remove();
+
+  myfigure.append("text")
+    .attr("class", "myxlabel")
+    .attr("x", (w / 2))
+    .attr("y", h - (padding / 3))
+    .attr("text-anchor", "middle")
+    .style("font-size", "12px")
+    .text("Year");
+
+  d3.select(".myylabel").remove();
+
+  myfigure.append("text")
+    .attr("class", "myylabel")
+    //.attr("x", (padding / 3))
+    //.attr("y", (h / 2))
+    .attr("x", 0)
+    .attr("y", 0)
+    .attr("text-anchor", "middle")
+    .attr("transform", "translate(" + (padding / 3) + "," + (h / 2) +") rotate(-90)")
+    .style("font-size", "12px")
+    .text("Total Of Deaths, Damage in Millions of Dollars, or Houses Destroyed");
 }
 
 function onSelectChangeLineChart() {
@@ -784,7 +819,7 @@ function onSelectChangeKeyIndicatorsLineChart() {
   const newSelection = d3.select("#myselect option:checked").node().value;
   console.log("onSelectChangeKeyIndicatorsLineChart: " + newSelection1 + " " + newSelection);
 
-  updateLineChart(key_indicators_by_country[newSelection], useLogScale);
+  updateLineChart(newSelection, key_indicators_by_country[newSelection], useLogScale);
 }
 
 function onSelectToggleScaleLineChart() {
@@ -794,5 +829,5 @@ function onSelectToggleScaleLineChart() {
   const newSelection = d3.select("#myselect option:checked").node().value;
   console.log("onSelectToggleScaleLineChart: " + newSelection1 + " " + newSelection);
 
-  updateLineChart(key_indicators_by_country[newSelection], useLogScale);
+  updateLineChart(newSelection, key_indicators_by_country[newSelection], useLogScale);
 }

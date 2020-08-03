@@ -83,7 +83,7 @@ function annotateBarChartEarthquakeDamageMillionsDollars(isLog) {
     .attr("y", 55)
     .attr("text-anchor", "left")
     .style("font-size", "12px")
-    .style("fill", "red")
+    .style("fill", "firebrick")
     .text("Stronger earthquakes cause more damage, driven by a higher rate of occurrence.")
     ;
 
@@ -96,8 +96,21 @@ function annotateBarChartEarthquakeDamageMillionsDollars(isLog) {
     .attr("y", 70)
     .attr("text-anchor", "left")
     .style("font-size", "12px")
-    .style("fill", "red")
+    .style("fill", "firebrick")
     .text("Dot size corresponds to number of earthquakes at a given magnitude.")
+    ;
+
+  myfigure.append("g")
+    .attr("class", "myannotation1")
+    .append("text")
+    .transition()
+    .duration(2000)
+    .attr("x", 30)
+    .attr("y", 670)
+    .attr("text-anchor", "left")
+    .style("font-size", "12px")
+    .style("fill", "black")
+    .text("Hover over for more information.")
     ;
 
   if(isLog) {
@@ -112,7 +125,7 @@ function annotateBarChartEarthquakeDamageMillionsDollars(isLog) {
       .attr("cx", 610)
       .attr("cy", 115)
       .style("fill", "none")
-      .style("stroke", "red")
+      .style("stroke", "firebrick")
       ;
   } else {
     d3.selectAll(".myannotation2").remove();
@@ -126,7 +139,7 @@ function annotateBarChartEarthquakeDamageMillionsDollars(isLog) {
       .attr("cx", 690)
       .attr("cy", 80)
       .style("fill", "none")
-      .style("stroke", "red")
+      .style("stroke", "firebrick")
       ;
 
     myfigure.append("g")
@@ -138,7 +151,7 @@ function annotateBarChartEarthquakeDamageMillionsDollars(isLog) {
       .attr("cx", 540)
       .attr("cy", 300)
       .style("fill", "none")
-      .style("stroke", "red")
+      .style("stroke", "firebrick")
       ;
 
     myfigure.append("g")
@@ -150,7 +163,7 @@ function annotateBarChartEarthquakeDamageMillionsDollars(isLog) {
       .attr("cx", 610)
       .attr("cy", 420)
       .style("fill", "none")
-      .style("stroke", "red")
+      .style("stroke", "firebrick")
       ;
   }
 }
@@ -175,7 +188,7 @@ function annotateBarChartEarthquakeDeaths(isLog) {
     .attr("y", 55)
     .attr("text-anchor", "left")
     .style("font-size", "12px")
-    .style("fill", "red")
+    .style("fill", "firebrick")
     .text("7 to 9 magnitude earthquakes had the most deaths, driven by a higher rate of occurrence.")
     ;
 
@@ -188,8 +201,21 @@ function annotateBarChartEarthquakeDeaths(isLog) {
     .attr("y", 70)
     .attr("text-anchor", "left")
     .style("font-size", "12px")
-    .style("fill", "red")
+    .style("fill", "firebrick")
     .text("Dot size corresponds to number of earthquakes at a given magnitude.")
+    ;
+
+  myfigure.append("g")
+    .attr("class", "myannotation1")
+    .append("text")
+    .transition()
+    .duration(2000)
+    .attr("x", 30)
+    .attr("y", 670)
+    .attr("text-anchor", "left")
+    .style("font-size", "12px")
+    .style("fill", "black")
+    .text("Hover over for more information.")
     ;
 
   if(isLog) {
@@ -204,7 +230,7 @@ function annotateBarChartEarthquakeDeaths(isLog) {
       .attr("cx", 610)
       .attr("cy", 115)
       .style("fill", "none")
-      .style("stroke", "red")
+      .style("stroke", "firebrick")
       ;
   } else {
     d3.selectAll(".myannotation2").remove();
@@ -219,7 +245,7 @@ function annotateBarChartEarthquakeDeaths(isLog) {
       .attr("height", 420)
       .attr("width", 180)
       .style("fill", "none")
-      .style("stroke", "red")
+      .style("stroke", "firebrick")
       ;
   }
 }
@@ -486,8 +512,21 @@ function annotateBarChartEarthquakeCountByCountry() {
     .attr("y", (h / 4))
     .attr("text-anchor", "left")
     .style("font-size", "12px")
-    .style("fill", "red")
+    .style("fill", "firebrick")
     .text("Majority of earthquakes happen in a small subset of countries: China, Indonesia, Japan, and Iran.")
+    ;
+
+  myfigure.append("g")
+    .attr("class", "myannotation1")
+    .append("text")
+    .transition()
+    .duration(2000)
+    .attr("x", 30)
+    .attr("y", 670)
+    .attr("text-anchor", "left")
+    .style("font-size", "12px")
+    .style("fill", "black")
+    .text("Hover over for more information.")
     ;
 
   d3.select(".g.myannotation2").remove();
@@ -501,7 +540,7 @@ function annotateBarChartEarthquakeCountByCountry() {
     .attr("cx", 130)
     .attr("cy", 180)
     .style("fill", "none")
-    .style("stroke", "red")
+    .style("stroke", "firebrick")
     ;
 }
 
@@ -525,8 +564,21 @@ function annotateBarChartEarthquakeCountByRegion() {
     .attr("y", (h / 4))
     .attr("text-anchor", "left")
     .style("font-size", "12px")
-    .style("fill", "red")
+    .style("fill", "firebrick")
     .text("Majority of earthquakes happen in Central and South Pacific as well as East Asia.")
+    ;
+
+  myfigure.append("g")
+    .attr("class", "myannotation1")
+    .append("text")
+    .transition()
+    .duration(2000)
+    .attr("x", 30)
+    .attr("y", 670)
+    .attr("text-anchor", "left")
+    .style("font-size", "12px")
+    .style("fill", "black")
+    .text("Hover over for more information.")
     ;
 
   d3.select(".g.myannotation2").remove();
@@ -540,7 +592,7 @@ function annotateBarChartEarthquakeCountByRegion() {
     .attr("cx", 130)
     .attr("cy", 170)
     .style("fill", "none")
-    .style("stroke", "red")
+    .style("stroke", "firebrick")
     ;
 }
 
@@ -564,8 +616,21 @@ function annotateBarChartEarthquakeCountByYear() {
     .attr("y", (h / 4))
     .attr("text-anchor", "left")
     .style("font-size", "12px")
-    .style("fill", "red")
+    .style("fill", "firebrick")
     .text("Number of earthquakes per year has been increasing since 2000.")
+    ;
+
+  myfigure.append("g")
+    .attr("class", "myannotation1")
+    .append("text")
+    .transition()
+    .duration(2000)
+    .attr("x", 30)
+    .attr("y", 670)
+    .attr("text-anchor", "left")
+    .style("font-size", "12px")
+    .style("fill", "black")
+    .text("Hover over for more information.")
     ;
 
   d3.select(".g.myannotation2").remove();
@@ -579,7 +644,7 @@ function annotateBarChartEarthquakeCountByYear() {
     .attr("cx", 650)
     .attr("cy", 180)
     .style("fill", "none")
-    .style("stroke", "red")
+    .style("stroke", "firebrick")
     ;
 }
 
@@ -603,8 +668,21 @@ function annotateBarChartEarthquakeCountByMonth() {
     .attr("y", 60)
     .attr("text-anchor", "middle")
     .style("font-size", "12px")
-    .style("fill", "red")
+    .style("fill", "firebrick")
     .text("All months appear equally likely of experiencing an earthquake.")
+    ;
+
+  myfigure.append("g")
+    .attr("class", "myannotation1")
+    .append("text")
+    .transition()
+    .duration(2000)
+    .attr("x", 30)
+    .attr("y", 670)
+    .attr("text-anchor", "left")
+    .style("font-size", "12px")
+    .style("fill", "black")
+    .text("Hover over for more information.")
     ;
 }
 
@@ -628,8 +706,21 @@ function annotateBarChartEarthquakeCountByMagnitude() {
     .attr("y", 80)
     .attr("text-anchor", "left")
     .style("font-size", "12px")
-    .style("fill", "red")
+    .style("fill", "firebrick")
     .text("Since 1900 the most common earthquake magnitude is 7.5.")
+    ;
+
+  myfigure.append("g")
+    .attr("class", "myannotation1")
+    .append("text")
+    .transition()
+    .duration(2000)
+    .attr("x", 30)
+    .attr("y", 670)
+    .attr("text-anchor", "left")
+    .style("font-size", "12px")
+    .style("fill", "black")
+    .text("Hover over for more information.")
     ;
 
   d3.select(".g.myannotation2").remove();
@@ -643,7 +734,7 @@ function annotateBarChartEarthquakeCountByMagnitude() {
     .attr("cx", 550)
     .attr("cy", 100)
     .style("fill", "none")
-    .style("stroke", "red")
+    .style("stroke", "firebrick")
     ;
 }
 

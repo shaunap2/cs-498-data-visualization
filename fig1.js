@@ -317,31 +317,31 @@ function selectDataBarChart(selectionId) {
 function bodyLoadBarChartEarthquakeCountByCountry() {
   console.log("bodyLoadBarChartEarthquakeCountByCountry");
   initializeBarChart(earthquake_count_by_country, false);
-  updateBarChart(earthquake_count_by_country, false, false, "Earthquake Count by Country", "Country", "Total Number of Earthquakes");
+  updateBarChart(earthquake_count_by_country, false, false, "Earthquake Count by Country", "Country", "Total Number of Earthquakes", false);
 }
 
 function bodyLoadBarChartEarthquakeCountByRegion() {
   console.log("bodyLoadBarChartEarthquakeCountByRegion");
   initializeBarChart(earthquake_count_by_region, false);
-  updateBarChart(earthquake_count_by_region, false, false, "Earthquake Count by Region", "Region", "Total Number of Earthquakes");
+  updateBarChart(earthquake_count_by_region, false, false, "Earthquake Count by Region", "Region", "Total Number of Earthquakes", false);
 }
 
 function bodyLoadBarChartEarthquakeCountByYear() {
   console.log("bodyLoadBarChartEarthquakeCountByYear");
   initializeBarChart(earthquake_count_by_year_natural_order, false);
-  updateBarChart(earthquake_count_by_year_natural_order, false, false, "Earthquake Count by Year", "Year", "Total Number of Earthquakes");
+  updateBarChart(earthquake_count_by_year_natural_order, false, false, "Earthquake Count by Year", "Year", "Total Number of Earthquakes", false);
 }
 
 function bodyLoadBarChartEarthquakeCountByMonth() {
   console.log("bodyLoadBarChartEarthquakeCountByMonth");
   initializeBarChart(earthquake_count_by_month, true);
-  updateBarChart(earthquake_count_by_month, true, true, "Earthquake Count by Month", "Month", "Total Number of Earthquakes");
+  updateBarChart(earthquake_count_by_month, true, true, "Earthquake Count by Month", "Month", "Total Number of Earthquakes", true);
 }
 
 function bodyLoadBarChartEarthquakeCountByMagnitude() {
   console.log("bodyLoadBarChartEarthquakeCountByMagnitude");
   initializeBarChart(earthquake_count_by_magnitude, false);
-  updateBarChart(earthquake_count_by_magnitude, false, false, "Earthquake Count by Magnitude", "Magnitude", "Total Number of Earthquakes");
+  updateBarChart(earthquake_count_by_magnitude, false, false, "Earthquake Count by Magnitude", "Magnitude", "Total Number of Earthquakes", false);
 }
 
 function bodyLoadBarChart() {
@@ -409,7 +409,7 @@ function initializeBarChart(data, showXaxis) {
 
 var barChartMouseOverOriginalColor = "blue";
 
-function updateBarChart(data, showXaxis, useScaleOrdinal, plotTitle, xLabel, yLabel) {
+function updateBarChart(data, showXaxis, useScaleOrdinal, plotTitle, xLabel, yLabel, useGroups) {
   console.log("updateBarChart");
 
   // Figure for updating
@@ -446,7 +446,8 @@ function updateBarChart(data, showXaxis, useScaleOrdinal, plotTitle, xLabel, yLa
     .merge(rects)
     .append("title")
     .text(function(d) {
-      return d.key + " = " + d.value;
+      var token = useGroups ? d.group : d.key;
+      return token + " had a total of " + d.value + " earthquakes.";
     })
     ;
 
@@ -510,7 +511,8 @@ function updateBarChart(data, showXaxis, useScaleOrdinal, plotTitle, xLabel, yLa
   rects
     .select("title")
     .text(function(d) {
-      return d.key + " = " + d.value;
+      var token = useGroups ? d.group : d.key;
+      return token + " had a total of " + d.value + " earthquakes.";
     })
     ;
 

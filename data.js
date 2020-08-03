@@ -410,18 +410,18 @@ earthquake_count_by_year_natural_order = [
 ];
 
 var earthquake_count_by_month = [
-  {key:"1",value:322,group:"1"},
-  {key:"2",value:300,group:"2"},
-  {key:"3",value:302,group:"3"},
-  {key:"4",value:312,group:"4"},
-  {key:"5",value:323,group:"5"},
-  {key:"6",value:282,group:"6"},
-  {key:"7",value:305,group:"7"},
-  {key:"8",value:325,group:"8"},
-  {key:"9",value:311,group:"9"},
-  {key:"10",value:277,group:"10"},
-  {key:"11",value:344,group:"11"},
-  {key:"12",value:310,group:"12"}
+  {key:"Jan",value:322,group:"January"},
+  {key:"Feb",value:300,group:"February"},
+  {key:"Mar",value:302,group:"March"},
+  {key:"Apr",value:312,group:"April"},
+  {key:"May",value:323,group:"May"},
+  {key:"Jun",value:282,group:"June"},
+  {key:"Jul",value:305,group:"July"},
+  {key:"Aug",value:325,group:"August"},
+  {key:"Sep",value:311,group:"September"},
+  {key:"Oct",value:277,group:"October"},
+  {key:"Nov",value:344,group:"November"},
+  {key:"Dec",value:310,group:"December"}
 ];
 
 var earthquake_count_by_magnitude = [

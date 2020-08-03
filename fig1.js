@@ -121,9 +121,9 @@ function annotateBarChartEarthquakeDamageMillionsDollars(isLog) {
       .append("circle")
       .transition()
       .duration(2000)
-      .attr("r", 105)
-      .attr("cx", 610)
-      .attr("cy", 115)
+      .attr("r", 150)
+      .attr("cx", 510)
+      .attr("cy", 220)
       .style("fill", "none")
       .style("stroke", "firebrick")
       ;
@@ -185,11 +185,11 @@ function annotateBarChartEarthquakeDeaths(isLog) {
     .transition()
     .duration(2000)
     .attr("x", 20)
-    .attr("y", 55)
+    .attr("y", 48)
     .attr("text-anchor", "left")
     .style("font-size", "12px")
     .style("fill", "firebrick")
-    .text("7 to 9 magnitude earthquakes had the most deaths, driven by a higher rate of occurrence.")
+    .text("5 to 8 magnitude earthquakes had the most deaths, driven by a higher rate of occurrence.")
     ;
 
   myfigure.append("g")
@@ -198,7 +198,7 @@ function annotateBarChartEarthquakeDeaths(isLog) {
     .transition()
     .duration(2000)
     .attr("x", 20)
-    .attr("y", 70)
+    .attr("y", 65)
     .attr("text-anchor", "left")
     .style("font-size", "12px")
     .style("fill", "firebrick")
@@ -226,9 +226,9 @@ function annotateBarChartEarthquakeDeaths(isLog) {
       .append("circle")
       .transition()
       .duration(2000)
-      .attr("r", 105)
-      .attr("cx", 610)
-      .attr("cy", 115)
+      .attr("r", 150)
+      .attr("cx", 510)
+      .attr("cy", 200)
       .style("fill", "none")
       .style("stroke", "firebrick")
       ;
@@ -240,10 +240,10 @@ function annotateBarChartEarthquakeDeaths(isLog) {
       .append("rect")
       .transition()
       .duration(2000)
-      .attr("x", 530)
-      .attr("y", 60)
-      .attr("height", 420)
-      .attr("width", 180)
+      .attr("x", 420)
+      .attr("y", 65)
+      .attr("height", 550)
+      .attr("width", 220)
       .style("fill", "none")
       .style("stroke", "firebrick")
       ;
@@ -340,7 +340,7 @@ function updateScatterPlot(data, logScaleX, logScaleY, useGroupForRadius, plotTi
   }
 
   var aScale = d3.scaleSqrt()
-    .domain([0, d3.max(data, function(d) { return d.value; })])
+    .domain([0, d3.max(data, function(d) { return d.group; })])
     .range([0, 10]);
 
   // General Update Pattern
@@ -365,7 +365,7 @@ function updateScatterPlot(data, logScaleX, logScaleY, useGroupForRadius, plotTi
     .duration(2000)
     .attr("r", function(d) {
       // Do not return a miniscule small radius.
-      var radius = useGroupForRadius ? aScale(d.value) : minRadius;
+      var radius = useGroupForRadius ? aScale(d.group) : minRadius;
       return radius < minRadius  ? minRadius : radius; }
     )
     .attr("cx", function(d, i) { return xScale(d.key); })

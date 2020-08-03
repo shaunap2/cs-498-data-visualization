@@ -66,13 +66,162 @@ function bodyLoadScatterPlot() {
 function bodyLoadScatterPlotEarthquakeDamageMillionsDollars() {
   console.log("bodyLoadScatterPlotEarthquakeDamageMillionsDollars");
   initializeScatterPlot(earthquake_damage_millions_of_dollars, false, true)
-  updateScatterPlot(earthquake_damage_millions_of_dollars, false, true, true, "Damage in Millions of Dollars by Magnitude", "Magnitude", "Damage in Millions of Dollars", true);
+  updateScatterPlot(earthquake_damage_millions_of_dollars, false, true, true, "Damage in Millions of Dollars by Magnitude", "Magnitude", "Damage in Millions of Dollars", true, annotateBarChartEarthquakeDamageMillionsDollars);
+}
+
+function annotateBarChartEarthquakeDamageMillionsDollars(isLog) {
+  var myfigure = d3.select("#myfigure");
+
+  d3.selectAll(".myannotation1").remove();
+
+  myfigure.append("g")
+    .attr("class", "myannotation1")
+    .append("text")
+    .transition()
+    .duration(2000)
+    .attr("x", 60)
+    .attr("y", 55)
+    .attr("text-anchor", "left")
+    .style("font-size", "12px")
+    .style("fill", "red")
+    .text("Stronger earthquakes cause more damage, driven by a higher rate of occurrence.")
+    ;
+
+  myfigure.append("g")
+    .attr("class", "myannotation1")
+    .append("text")
+    .transition()
+    .duration(2000)
+    .attr("x", 60)
+    .attr("y", 70)
+    .attr("text-anchor", "left")
+    .style("font-size", "12px")
+    .style("fill", "red")
+    .text("Dot size corresponds to number of earthquakes at a given magnitude.")
+    ;
+
+  if(isLog) {
+    d3.selectAll(".myannotation2").remove();
+
+    myfigure.append("g")
+      .attr("class", "myannotation2")
+      .append("circle")
+      .transition()
+      .duration(2000)
+      .attr("r", 105)
+      .attr("cx", 610)
+      .attr("cy", 115)
+      .style("fill", "none")
+      .style("stroke", "red")
+      ;
+  } else {
+    d3.selectAll(".myannotation2").remove();
+
+    myfigure.append("g")
+      .attr("class", "myannotation2")
+      .append("circle")
+      .transition()
+      .duration(2000)
+      .attr("r", 20)
+      .attr("cx", 690)
+      .attr("cy", 80)
+      .style("fill", "none")
+      .style("stroke", "red")
+      ;
+
+    myfigure.append("g")
+      .attr("class", "myannotation2")
+      .append("circle")
+      .transition()
+      .duration(2000)
+      .attr("r", 20)
+      .attr("cx", 540)
+      .attr("cy", 300)
+      .style("fill", "none")
+      .style("stroke", "red")
+      ;
+
+    myfigure.append("g")
+      .attr("class", "myannotation2")
+      .append("circle")
+      .transition()
+      .duration(2000)
+      .attr("r", 20)
+      .attr("cx", 610)
+      .attr("cy", 420)
+      .style("fill", "none")
+      .style("stroke", "red")
+      ;
+  }
 }
 
 function bodyLoadScatterPlotEarthquakeDeaths() {
   console.log("bodyLoadScatterPlotEarthquakeDeaths");
   initializeScatterPlot(earthquake_deaths, false, true)
-  updateScatterPlot(earthquake_deaths, false, true, true, "Number of Deaths by Magnitude", "Magnitude", "Number of Deaths", false);
+  updateScatterPlot(earthquake_deaths, false, true, true, "Number of Deaths by Magnitude", "Magnitude", "Number of Deaths", false, annotateBarChartEarthquakeDeaths);
+}
+
+function annotateBarChartEarthquakeDeaths(isLog) {
+  var myfigure = d3.select("#myfigure");
+
+  d3.selectAll(".myannotation1").remove();
+
+  myfigure.append("g")
+    .attr("class", "myannotation1")
+    .append("text")
+    .transition()
+    .duration(2000)
+    .attr("x", 20)
+    .attr("y", 55)
+    .attr("text-anchor", "left")
+    .style("font-size", "12px")
+    .style("fill", "red")
+    .text("7 to 9 magnitude earthquakes had the most deaths, driven by a higher rate of occurrence.")
+    ;
+
+  myfigure.append("g")
+    .attr("class", "myannotation1")
+    .append("text")
+    .transition()
+    .duration(2000)
+    .attr("x", 20)
+    .attr("y", 70)
+    .attr("text-anchor", "left")
+    .style("font-size", "12px")
+    .style("fill", "red")
+    .text("Dot size corresponds to number of earthquakes at a given magnitude.")
+    ;
+
+  if(isLog) {
+    d3.selectAll(".myannotation2").remove();
+
+    myfigure.append("g")
+      .attr("class", "myannotation2")
+      .append("circle")
+      .transition()
+      .duration(2000)
+      .attr("r", 105)
+      .attr("cx", 610)
+      .attr("cy", 115)
+      .style("fill", "none")
+      .style("stroke", "red")
+      ;
+  } else {
+    d3.selectAll(".myannotation2").remove();
+
+    myfigure.append("g")
+      .attr("class", "myannotation2")
+      .append("rect")
+      .transition()
+      .duration(2000)
+      .attr("x", 530)
+      .attr("y", 60)
+      .attr("height", 420)
+      .attr("width", 180)
+      .style("fill", "none")
+      .style("stroke", "red")
+      ;
+  }
 }
 
 function initializeScatterPlot(data, logScaleX, logScaleY) {
@@ -133,7 +282,7 @@ function initializeScatterPlot(data, logScaleX, logScaleY) {
     ;
 }
 
-function updateScatterPlot(data, logScaleX, logScaleY, useGroupForRadius, plotTitle, xLabel, yLabel, showMoney) {
+function updateScatterPlot(data, logScaleX, logScaleY, useGroupForRadius, plotTitle, xLabel, yLabel, showMoney, annotationFunction) {
   console.log("updateScatterPlot");
 
   // Figure for updating
@@ -271,6 +420,9 @@ function updateScatterPlot(data, logScaleX, logScaleY, useGroupForRadius, plotTi
     .attr("transform", "translate(" + (padding / 3) + "," + (h / 2) +") rotate(-90)")
     .style("font-size", "12px")
     .text(yLabel);
+
+  // Annotation
+  annotationFunction(logScaleY);
 }
 
 function onSelectChangeScatterPlot() {
@@ -283,14 +435,14 @@ function onSelectToggleScaleScatterPlotEarthquakeDeaths(data) {
   const newSelection = d3.select("#myselect option:checked").node().value;
   console.log("onSelectToggleScaleScatterPlotEarthquakeDeaths: " + newSelection);
   var useLogScale = parseInt(newSelection) === 2 ? true : false;
-  updateScatterPlot(earthquake_deaths, false, useLogScale, true, "Number of Deaths by Magnitude", "Magnitude", "Number of Deaths", false);
+  updateScatterPlot(earthquake_deaths, false, useLogScale, true, "Number of Deaths by Magnitude", "Magnitude", "Number of Deaths", false, annotateBarChartEarthquakeDeaths);
 }
 
 function onSelectToggleScaleScatterPlotEarthquakeDamageMillionsDollars() {
   const newSelection = d3.select("#myselect option:checked").node().value;
   console.log("onSelectToggleScaleScatterPlotEarthquakeDamageMillionsDollars: " + newSelection);
   var useLogScale = parseInt(newSelection) === 2 ? true : false;
-  updateScatterPlot(earthquake_damage_millions_of_dollars, false, useLogScale, true, "Damage in Millions of Dollars by Magnitude", "Magnitude", "Damage in Millions of Dollars", true);
+  updateScatterPlot(earthquake_damage_millions_of_dollars, false, useLogScale, true, "Damage in Millions of Dollars by Magnitude", "Magnitude", "Damage in Millions of Dollars", true, annotateBarChartEarthquakeDamageMillionsDollars);
 }
 
 /* BAR CHART FUNCTIONS */
@@ -317,31 +469,182 @@ function selectDataBarChart(selectionId) {
 function bodyLoadBarChartEarthquakeCountByCountry() {
   console.log("bodyLoadBarChartEarthquakeCountByCountry");
   initializeBarChart(earthquake_count_by_country, false);
-  updateBarChart(earthquake_count_by_country, false, false, "Earthquake Count by Country", "Country", "Total Number of Earthquakes", false);
+  updateBarChart(earthquake_count_by_country, false, false, "Earthquake Count by Country", "Country", "Total Number of Earthquakes", false, annotateBarChartEarthquakeCountByCountry);
+}
+
+function annotateBarChartEarthquakeCountByCountry() {
+  var myfigure = d3.select("#myfigure");
+
+  d3.select(".g.myannotation1").remove();
+
+  myfigure.append("g")
+    .attr("class", "myannotation1")
+    .append("text")
+    .transition()
+    .duration(2000)
+    .attr("x", 240)
+    .attr("y", (h / 4))
+    .attr("text-anchor", "left")
+    .style("font-size", "12px")
+    .style("fill", "red")
+    .text("Majority of earthquakes happen in a small subset of countries: China, Indonesia, Japan, and Iran.")
+    ;
+
+  d3.select(".g.myannotation2").remove();
+
+  myfigure.append("g")
+    .attr("class", "myannotation2")
+    .append("circle")
+    .transition()
+    .duration(2000)
+    .attr("r", 100)
+    .attr("cx", 130)
+    .attr("cy", 180)
+    .style("fill", "none")
+    .style("stroke", "red")
+    ;
 }
 
 function bodyLoadBarChartEarthquakeCountByRegion() {
   console.log("bodyLoadBarChartEarthquakeCountByRegion");
   initializeBarChart(earthquake_count_by_region, false);
-  updateBarChart(earthquake_count_by_region, false, false, "Earthquake Count by Region", "Region", "Total Number of Earthquakes", false);
+  updateBarChart(earthquake_count_by_region, false, false, "Earthquake Count by Region", "Region", "Total Number of Earthquakes", false, annotateBarChartEarthquakeCountByRegion);
+}
+
+function annotateBarChartEarthquakeCountByRegion() {
+  var myfigure = d3.select("#myfigure");
+
+  d3.select(".g.myannotation1").remove();
+
+  myfigure.append("g")
+    .attr("class", "myannotation1")
+    .append("text")
+    .transition()
+    .duration(2000)
+    .attr("x", 240)
+    .attr("y", (h / 4))
+    .attr("text-anchor", "left")
+    .style("font-size", "12px")
+    .style("fill", "red")
+    .text("Majority of earthquakes happen in Central and South Pacific as well as East Asia.")
+    ;
+
+  d3.select(".g.myannotation2").remove();
+
+  myfigure.append("g")
+    .attr("class", "myannotation2")
+    .append("circle")
+    .transition()
+    .duration(2000)
+    .attr("r", 100)
+    .attr("cx", 130)
+    .attr("cy", 170)
+    .style("fill", "none")
+    .style("stroke", "red")
+    ;
 }
 
 function bodyLoadBarChartEarthquakeCountByYear() {
   console.log("bodyLoadBarChartEarthquakeCountByYear");
   initializeBarChart(earthquake_count_by_year_natural_order, false);
-  updateBarChart(earthquake_count_by_year_natural_order, false, false, "Earthquake Count by Year", "Year", "Total Number of Earthquakes", false);
+  updateBarChart(earthquake_count_by_year_natural_order, false, false, "Earthquake Count by Year", "Year", "Total Number of Earthquakes", false, annotateBarChartEarthquakeCountByYear);
+}
+
+function annotateBarChartEarthquakeCountByYear() {
+  var myfigure = d3.select("#myfigure");
+
+  d3.select(".g.myannotation1").remove();
+
+  myfigure.append("g")
+    .attr("class", "myannotation1")
+    .append("text")
+    .transition()
+    .duration(2000)
+    .attr("x", 140)
+    .attr("y", (h / 4))
+    .attr("text-anchor", "left")
+    .style("font-size", "12px")
+    .style("fill", "red")
+    .text("Number of earthquakes per year has been increasing since 2000.")
+    ;
+
+  d3.select(".g.myannotation2").remove();
+
+  myfigure.append("g")
+    .attr("class", "myannotation2")
+    .append("circle")
+    .transition()
+    .duration(2000)
+    .attr("r", 140)
+    .attr("cx", 650)
+    .attr("cy", 180)
+    .style("fill", "none")
+    .style("stroke", "red")
+    ;
 }
 
 function bodyLoadBarChartEarthquakeCountByMonth() {
   console.log("bodyLoadBarChartEarthquakeCountByMonth");
   initializeBarChart(earthquake_count_by_month, true);
-  updateBarChart(earthquake_count_by_month, true, true, "Earthquake Count by Month", "Month", "Total Number of Earthquakes", true);
+  updateBarChart(earthquake_count_by_month, true, true, "Earthquake Count by Month", "Month", "Total Number of Earthquakes", true, annotateBarChartEarthquakeCountByMonth);
+}
+
+function annotateBarChartEarthquakeCountByMonth() {
+  var myfigure = d3.select("#myfigure");
+
+  d3.select(".g.myannotation1").remove();
+
+  myfigure.append("g")
+    .attr("class", "myannotation1")
+    .append("text")
+    .transition()
+    .duration(2000)
+    .attr("x", w / 2)
+    .attr("y", 60)
+    .attr("text-anchor", "middle")
+    .style("font-size", "12px")
+    .style("fill", "red")
+    .text("All months appear equally likely of experiencing an earthquake.")
+    ;
 }
 
 function bodyLoadBarChartEarthquakeCountByMagnitude() {
   console.log("bodyLoadBarChartEarthquakeCountByMagnitude");
   initializeBarChart(earthquake_count_by_magnitude, false);
-  updateBarChart(earthquake_count_by_magnitude, false, false, "Earthquake Count by Magnitude", "Magnitude", "Total Number of Earthquakes", false);
+  updateBarChart(earthquake_count_by_magnitude, false, false, "Earthquake Count by Magnitude", "Magnitude", "Total Number of Earthquakes", false, annotateBarChartEarthquakeCountByMagnitude);
+}
+
+function annotateBarChartEarthquakeCountByMagnitude() {
+  var myfigure = d3.select("#myfigure");
+
+  d3.select(".g.myannotation1").remove();
+
+  myfigure.append("g")
+    .attr("class", "myannotation1")
+    .append("text")
+    .transition()
+    .duration(2000)
+    .attr("x", 140)
+    .attr("y", 80)
+    .attr("text-anchor", "left")
+    .style("font-size", "12px")
+    .style("fill", "red")
+    .text("Since 1900 the most common earthquake magnitude is 7.5.")
+    ;
+
+  d3.select(".g.myannotation2").remove();
+
+  myfigure.append("g")
+    .attr("class", "myannotation2")
+    .append("circle")
+    .transition()
+    .duration(2000)
+    .attr("r", 50)
+    .attr("cx", 550)
+    .attr("cy", 100)
+    .style("fill", "none")
+    .style("stroke", "red")
+    ;
 }
 
 function bodyLoadBarChart() {
@@ -409,7 +712,7 @@ function initializeBarChart(data, showXaxis) {
 
 var barChartMouseOverOriginalColor = "blue";
 
-function updateBarChart(data, showXaxis, useScaleOrdinal, plotTitle, xLabel, yLabel, useGroups) {
+function updateBarChart(data, showXaxis, useScaleOrdinal, plotTitle, xLabel, yLabel, useGroups, annotationFunction) {
   console.log("updateBarChart");
 
   // Figure for updating
@@ -550,6 +853,9 @@ function updateBarChart(data, showXaxis, useScaleOrdinal, plotTitle, xLabel, yLa
     .attr("transform", "translate(" + (padding / 3) + "," + (h / 2) +") rotate(-90)")
     .style("font-size", "12px")
     .text(yLabel);
+
+  // Annotation
+  annotationFunction();
 }
 
 function onSelectChangeBarChart() {

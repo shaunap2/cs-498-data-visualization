@@ -87,13 +87,13 @@ function initializeScatterPlot(data, logScaleX, logScaleY) {
   // Define scales.
   var xScale = d3.scaleLinear()
     .domain([0, d3.max(data, function(d) { return d.key; })])
-    .range([padding, w - padding * 2])
+    .range([padding, w - padding])
     ;
 
   if(logScaleX) {
     xScale = d3.scaleSymlog()
       .domain([0, d3.max(data, function(d) { return d.key; })])
-      .range([padding, w - padding * 2])
+      .range([padding, w - padding])
       ;
   }
 
@@ -142,13 +142,13 @@ function updateScatterPlot(data, logScaleX, logScaleY, useGroupForRadius, plotTi
   // Update scales.
   var xScale = d3.scaleLinear()
     .domain([0, d3.max(data, function(d) { return d.key; })])
-    .range([padding, w - padding * 2])
+    .range([padding, w - padding])
     ;
 
   if(logScaleX) {
     xScale = d3.scaleSymlog()
       .domain([0, d3.max(data, function(d) { return d.key; })])
-      .range([padding, w - padding * 2])
+      .range([padding, w - padding])
       ;
   }
 
@@ -366,7 +366,7 @@ function initializeBarChart(data, showXaxis) {
   // Define scales.
   var xScale = d3.scaleBand()
     .domain(data.map(function(d) { return d.key; }))
-    .rangeRound([padding, w - padding * 2])
+    .rangeRound([padding, w - padding])
     .paddingInner(0.05)
     ;
 
@@ -418,7 +418,7 @@ function updateBarChart(data, showXaxis, useScaleOrdinal, plotTitle, xLabel, yLa
   // Update scales.
   var xScale = d3.scaleBand()
     .domain(data.map(function(d) { return d.key; }))
-    .rangeRound([padding, w - padding * 2])
+    .rangeRound([padding, w - padding])
     .paddingInner(0.05)
     ;
 
@@ -647,9 +647,11 @@ function initializeLineChart(newData, logScaleY) {
 
   var data = []
 
-  for (var key in newData) {
-    data.push(newData[key]);
-  }
+  //for (var key in newData) {
+    data.push(newData['deaths']);
+    data.push(newData['damage']);
+    data.push(newData['homes']);
+  //}
 
   //console.log(data);
   //console.log("Xmax: " + findmax(data, 0));
@@ -664,7 +666,7 @@ function initializeLineChart(newData, logScaleY) {
   // Define scales.
   var xScale = d3.scaleLinear()
     .domain([1900, findmax(data, 0)])
-    .range([padding, w - padding * 2])
+    .range([padding, w - padding])
     ;
 
   var yScale = d3.scaleLinear()
@@ -703,14 +705,18 @@ function initializeLineChart(newData, logScaleY) {
     ;
 }
 
+var lineChartFirstLoad = true;
+
 function updateLineChart(country, newData, logScaleY) {
   console.log("updateLineChart");
 
   var data = []
 
-  for (var key in newData) {
-    data.push(newData[key]);
-  }
+  //for (var key in newData) {
+    data.push(newData['deaths']);
+    data.push(newData['damage']);
+    data.push(newData['homes']);
+  //}
 
   // Figure for updating
   var myfigure = d3.select("#myfigure");
@@ -718,7 +724,7 @@ function updateLineChart(country, newData, logScaleY) {
   // Update scales.
   var xScale = d3.scaleLinear()
     .domain([1900, findmax(data, 0)])
-    .range([padding, w - padding * 2])
+    .range([padding, w - padding])
     ;
 
   var yScale = d3.scaleLinear()
@@ -758,7 +764,7 @@ function updateLineChart(country, newData, logScaleY) {
   lines.transition()
     .duration(2000)
     .attr("d", lineHelper)
-    .attr("stroke", function(d, i) { return ["red", "purple", "green"][i]})
+    .attr("stroke", function(d, i) { return ["firebrick", "olivedrab", "royalblue"][i]})
     .attr("fill", "none")
     .attr("stroke-width", 2)
     ;
@@ -792,7 +798,7 @@ function updateLineChart(country, newData, logScaleY) {
     .attr("text-anchor", "middle")
     .style("font-size", "16px")
     .style("text-decoration", "underline")
-    .text("Key Indicators: " + country);
+    .text("Key Indicators by Year: " + country);
 
   d3.select(".myxlabel").remove();
 
@@ -808,14 +814,68 @@ function updateLineChart(country, newData, logScaleY) {
 
   myfigure.append("text")
     .attr("class", "myylabel")
-    //.attr("x", (padding / 3))
-    //.attr("y", (h / 2))
     .attr("x", 0)
     .attr("y", 0)
     .attr("text-anchor", "middle")
-    .attr("transform", "translate(" + (padding / 3) + "," + (h / 2) +") rotate(-90)")
+    .attr("transform", "translate(" + (padding / 6) + "," + (h / 2) +") rotate(-90)")
     .style("font-size", "12px")
-    .text("Total Of Deaths, Damage in Millions of Dollars, or Houses Destroyed");
+    .text("Total Of Deaths, Damage in Millions of Dollars, or Homes Destroyed");
+
+  // Add Legend
+  if(lineChartFirstLoad) {
+    var xoffset = w - 210;
+    var xoffset1 = xoffset + 10;
+    var myoffset = padding / 6;
+    var mydelta = 15;
+    var myfontsize = "12px";
+
+    myfigure.append("circle")
+      .attr("cx", xoffset)
+      .attr("cy", myoffset)
+      .attr("r", 6)
+      .style("fill", "firebrick")
+      ;
+
+    myfigure.append("circle")
+      .attr("cx", xoffset)
+      .attr("cy", myoffset + mydelta)
+      .attr("r", 6)
+      .style("fill", "olivedrab")
+      ;
+
+    myfigure.append("circle")
+      .attr("cx", xoffset)
+      .attr("cy", myoffset + (2 * mydelta))
+      .attr("r", 6)
+      .style("fill", "royalblue")
+      ;
+
+    myfigure.append("text")
+      .attr("x", xoffset1)
+      .attr("y", myoffset)
+      .text("Total Deaths")
+      .style("font-size", myfontsize)
+      .attr("alignment-baseline","middle")
+      ;
+
+    myfigure.append("text")
+      .attr("x", xoffset1)
+      .attr("y", myoffset + mydelta)
+      .text("Total Damage in Millions of Dollars")
+      .style("font-size", myfontsize)
+      .attr("alignment-baseline","middle")
+      ;
+
+    myfigure.append("text")
+      .attr("x", xoffset1)
+      .attr("y", myoffset + (2 * mydelta))
+      .text("Total Homes Destroyed")
+      .style("font-size", myfontsize)
+      .attr("alignment-baseline","middle")
+      ;
+
+    lineChartFirstLoad = false;
+  }
 }
 
 function onSelectChangeLineChart() {

@@ -8,6 +8,14 @@ var minRadius = 3;
 var hoverColor = "royalblue"
 var bb = true;
 
+// Format Money Properly
+var currencyFormatter = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+});
+
+var commaFormatter = new Intl.NumberFormat("en-US");
+
 /* SHARED */
 
 function populateSelect() {
@@ -58,13 +66,13 @@ function bodyLoadScatterPlot() {
 function bodyLoadScatterPlotEarthquakeDamageMillionsDollars() {
   console.log("bodyLoadScatterPlotEarthquakeDamageMillionsDollars");
   initializeScatterPlot(earthquake_damage_millions_of_dollars, false, true)
-  updateScatterPlot(earthquake_damage_millions_of_dollars, false, true, true, "Damage in Millions of Dollars by Magnitude", "Magnitude", "Damage in Millions of Dollars");
+  updateScatterPlot(earthquake_damage_millions_of_dollars, false, true, true, "Damage in Millions of Dollars by Magnitude", "Magnitude", "Damage in Millions of Dollars", true);
 }
 
 function bodyLoadScatterPlotEarthquakeDeaths() {
   console.log("bodyLoadScatterPlotEarthquakeDeaths");
   initializeScatterPlot(earthquake_deaths, false, true)
-  updateScatterPlot(earthquake_deaths, false, true, true, "Number of Deaths by Magnitude", "Magnitude", "Number of Deaths");
+  updateScatterPlot(earthquake_deaths, false, true, true, "Number of Deaths by Magnitude", "Magnitude", "Number of Deaths", false);
 }
 
 function initializeScatterPlot(data, logScaleX, logScaleY) {
@@ -125,7 +133,7 @@ function initializeScatterPlot(data, logScaleX, logScaleY) {
     ;
 }
 
-function updateScatterPlot(data, logScaleX, logScaleY, useGroupForRadius, plotTitle, xLabel, yLabel) {
+function updateScatterPlot(data, logScaleX, logScaleY, useGroupForRadius, plotTitle, xLabel, yLabel, showMoney) {
   console.log("updateScatterPlot");
 
   // Figure for updating
@@ -168,7 +176,8 @@ function updateScatterPlot(data, logScaleX, logScaleY, useGroupForRadius, plotTi
     .merge(dots)
     .append("title")
     .text(function(d) {
-      return d.key + " = " + d.value + (d.group !== d.key ? " ; " + d.group : "");
+      var damageString = showMoney ? currencyFormatter.format(d.value) + " in damage." : commaFormatter.format(d.value) + " deaths.";
+      return d.group + " total " + d.key + " magnitude earthquakes generated a cumulative " + damageString;
     })
     ;
 
@@ -223,7 +232,8 @@ function updateScatterPlot(data, logScaleX, logScaleY, useGroupForRadius, plotTi
   dots
     .select("title")
     .text(function(d) {
-      return d.key + " = " + d.value + (d.group !== d.key ? " ; " + d.group : "");
+      var damageString = showMoney ? currencyFormatter.format(d.value) + " in damage." : commaFormatter.format(d.value) + " deaths.";
+      return d.group + " total " + d.key + " magnitude earthquakes generated a cumulative " + damageString;
     })
     ;
 
@@ -273,14 +283,14 @@ function onSelectToggleScaleScatterPlotEarthquakeDeaths(data) {
   const newSelection = d3.select("#myselect option:checked").node().value;
   console.log("onSelectToggleScaleScatterPlotEarthquakeDeaths: " + newSelection);
   var useLogScale = parseInt(newSelection) === 2 ? true : false;
-  updateScatterPlot(earthquake_deaths, false, useLogScale, true, "Number of Deaths by Magnitude", "Magnitude", "Number of Deaths");
+  updateScatterPlot(earthquake_deaths, false, useLogScale, true, "Number of Deaths by Magnitude", "Magnitude", "Number of Deaths", false);
 }
 
 function onSelectToggleScaleScatterPlotEarthquakeDamageMillionsDollars() {
   const newSelection = d3.select("#myselect option:checked").node().value;
   console.log("onSelectToggleScaleScatterPlotEarthquakeDamageMillionsDollars: " + newSelection);
   var useLogScale = parseInt(newSelection) === 2 ? true : false;
-  updateScatterPlot(earthquake_damage_millions_of_dollars, false, useLogScale, true, "Damage in Millions of Dollars by Magnitude", "Magnitude", "Damage in Millions of Dollars");
+  updateScatterPlot(earthquake_damage_millions_of_dollars, false, useLogScale, true, "Damage in Millions of Dollars by Magnitude", "Magnitude", "Damage in Millions of Dollars", true);
 }
 
 /* BAR CHART FUNCTIONS */
